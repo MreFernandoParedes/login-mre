@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sistema IA — Zonas coloreadas</title>
+  <title>Sistema IA — Países interactivos</title>
   <style>
     body, html {
       margin: 0;
@@ -35,9 +35,8 @@
     import * as THREE from "three";
     import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
-    console.log("🌎 Iniciando renderizador de zonas...");
+    console.log("🌎 Iniciando globo interactivo...");
 
-    // Escena
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
     camera.position.set(0, 0, 3);
@@ -46,17 +45,15 @@
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.getElementById("globe").appendChild(renderer.domElement);
 
-    // Luces
     const light = new THREE.DirectionalLight(0xffffff, 2);
     light.position.set(5, 3, 5);
     scene.add(light);
     scene.add(new THREE.AmbientLight(0x404040, 1.5));
 
-    // Controles
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
 
-    // Textura base del globo
+    // 🌐 Textura base
     const textureLoader = new THREE.TextureLoader();
     const earthTexture = textureLoader.load("https://cdn.jsdelivr.net/gh/turban/webgl-earth@master/images/2_no_clouds_4k.jpg");
 
@@ -66,32 +63,42 @@
     );
     scene.add(earth);
 
-    // 🔹 Cargar datos GeoJSON para países
+    // 🎯 Raycaster y mouse
+    const raycaster = new THREE.Raycaster();
+    const mouse = new THREE.Vector2();
+    let selectedCountry = null;
+
+    // 🔹 Cargar países (GeoJSON)
     fetch("https://cdn.jsdelivr.net/gh/johan/world.geo.json/world.geo.json")
       .then(res => res.json())
       .then(data => {
-        const colors = [0xff4444, 0x44ff44, 0x4488ff, 0xffff44, 0xff8844, 0x00ffff];
-
         data.features.forEach((feature, i) => {
-          const coords = feature.geometry.coordinates;
-          const type = feature.geometry.type;
-
-          const color = new THREE.Color(colors[i % colors.length]);
-
-          if (type === "Polygon") drawPolygon(coords, color);
-          else if (type === "MultiPolygon") coords.forEach(p => drawPolygon(p, color));
+          const color = new THREE.Color(0x0088ff);
+          const countryMesh = drawCountry(feature, color);
+          countryMesh.userData = { name: feature.properties.name };
+          scene.add(countryMesh);
         });
       });
 
-    // Función para proyectar y dibujar polígonos sobre el globo
+    function drawCountry(feature, color) {
+      const coords = feature.geometry.coordinates;
+      const type = feature.geometry.type;
+      const group = new THREE.Group();
+
+      if (type === "Polygon") group.add(drawPolygon(coords, color));
+      else if (type === "MultiPolygon") coords.forEach(p => group.add(drawPolygon(p, color)));
+
+      return group;
+    }
+
     function drawPolygon(polygon, color) {
       const shape = new THREE.Shape();
 
       polygon[0].forEach(([lon, lat], idx) => {
         const phi = (90 - lat) * (Math.PI / 180);
         const theta = (lon + 180) * (Math.PI / 180);
+        const radius = 1.001;
 
-        const radius = 1.001; // justo sobre la superficie
         const x = radius * Math.sin(phi) * Math.cos(theta);
         const y = radius * Math.cos(phi);
         const z = radius * Math.sin(phi) * Math.sin(theta);
@@ -102,7 +109,7 @@
 
       const geometry = new THREE.ShapeGeometry(shape);
       const material = new THREE.MeshBasicMaterial({
-        color: color,
+        color,
         transparent: true,
         opacity: 0.35,
         side: THREE.DoubleSide
@@ -111,10 +118,42 @@
       const mesh = new THREE.Mesh(geometry, material);
       mesh.rotation.y = Math.PI;
       mesh.rotation.x = Math.PI / 2;
-      scene.add(mesh);
+      return mesh;
     }
 
-    // Animación
+    // 🖱️ Detectar clics
+    window.addEventListener("click", (event) => {
+      const rect = renderer.domElement.getBoundingClientRect();
+      mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+      mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+      raycaster.setFromCamera(mouse, camera);
+      const intersects = raycaster.intersectObjects(scene.children, true);
+
+      if (intersects.length > 0) {
+        const obj = intersects[0].object;
+        const countryName = obj.parent?.userData?.name || obj.userData?.name;
+
+        if (countryName) {
+          console.log("🌍 País seleccionado:", countryName);
+
+          // Restaurar color anterior
+          if (selectedCountry) {
+            selectedCountry.material.color.set(0x0088ff);
+          }
+
+          // Nuevo país
+          selectedCountry = obj;
+          selectedCountry.material.color.set(0xffff00);
+
+          // Abrir nueva página (país.html)
+          const encoded = encodeURIComponent(countryName);
+          window.location.href = `pais.html?nombre=${encoded}`;
+        }
+      }
+    });
+
+    // 🎥 Animación
     function animate() {
       requestAnimationFrame(animate);
       earth.rotation.y += 0.0008;
@@ -123,7 +162,6 @@
     }
     animate();
 
-    // Ajustar ventana
     window.addEventListener("resize", () => {
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
