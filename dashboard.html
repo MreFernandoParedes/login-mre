@@ -36,7 +36,6 @@
   <script type="module">
     import * as THREE from "three";
     import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-    import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 
     console.log("🌍 Iniciando renderizador...");
 
@@ -49,7 +48,7 @@
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.getElementById("globe").appendChild(renderer.domElement);
 
-    // Luz
+    // Luces
     const light = new THREE.DirectionalLight(0xffffff, 2);
     light.position.set(5, 3, 5);
     scene.add(light);
@@ -60,12 +59,13 @@
     controls.enableDamping = true;
     controls.enableZoom = true;
 
-    // 🌐 Textura del planeta Tierra
+    // 🌐 Texturas reales del planeta Tierra
     const textureLoader = new THREE.TextureLoader();
-    const earthTexture = textureLoader.load("https://raw.githubusercontent.com/pmndrs/drei-assets/main/textures/earth_daymap.jpg");
-    const bumpMap = textureLoader.load("https://raw.githubusercontent.com/pmndrs/drei-assets/main/textures/earth_bump.jpg");
-    const specularMap = textureLoader.load("https://raw.githubusercontent.com/pmndrs/drei-assets/main/textures/earth_specular.jpg");
+    const earthTexture = textureLoader.load("https://cdn.jsdelivr.net/gh/turban/webgl-earth@master/images/2_no_clouds_4k.jpg");
+    const bumpMap = textureLoader.load("https://cdn.jsdelivr.net/gh/turban/webgl-earth@master/images/elev_bump_4k.jpg");
+    const specularMap = textureLoader.load("https://cdn.jsdelivr.net/gh/turban/webgl-earth@master/images/water_4k.png");
 
+    // Crear la esfera del planeta
     const geometry = new THREE.SphereGeometry(1, 64, 64);
     const material = new THREE.MeshPhongMaterial({
       map: earthTexture,
@@ -87,7 +87,7 @@
     }
     animate();
 
-    // Redimensionar
+    // Ajuste a ventana
     window.addEventListener("resize", () => {
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
