@@ -1,217 +1,195 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <title>Panel de Control — Globo 3D</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta charset="utf-8">
+<title>Panel de Control — Sistema IA</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- Three.js y Globe.gl -->
-  <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
-  <script src="https://unpkg.com/three-globe@2.30.0"></script>
+<!-- THREE.js -->
+<script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
 
-  <!-- Estilos mínimos para la maqueta -->
-  <style>
-    html, body {
-      margin: 0; height: 100%; overflow: hidden; background: #0a1d33; color: #fff;
-      font-family: "Segoe UI", Arial, sans-serif;
-    }
-    .topbar {
-      position: fixed; top: 0; left: 0; right: 0; height: 56px;
-      background: rgba(10, 29, 51, 0.85); backdrop-filter: blur(4px);
-      display: flex; align-items: center; padding: 0 16px; z-index: 10; border-bottom: 1px solid rgba(255,255,255,0.08);
-    }
-    .brand { display:flex; align-items:center; gap:10px; font-weight: 600; letter-spacing: .3px; }
-    .brand img { width: 28px; height: 28px; object-fit: contain; }
-    #globe {
-      position: absolute; inset: 56px 0 0 0;  /* debajo de la topbar */
-    }
-    .legend {
-      position: fixed; bottom: 18px; left: 16px; z-index: 11;
-      background: rgba(0,0,0,.45); padding: 10px 12px; border-radius: 10px;
-      border: 1px solid rgba(255,255,255,.12); font-size: 13px;
-    }
-    .legend .bar {
-      width: 240px; height: 10px; border-radius: 6px; margin-top: 6px;
-      background: linear-gradient(90deg, #2ecc71, #f1c40f, #e67e22, #e74c3c);
-    }
-    .legend .ticks { display:flex; justify-content: space-between; opacity:.9; }
-    .dock {
-      position: fixed; right: 16px; bottom: 16px; z-index: 11;
-      display: grid; gap: 8px;
-    }
-    .chip {
-      border: 1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.06);
-      padding: 8px 10px; border-radius: 999px; font-size: 12px;
-    }
-    a { color: #a9d6ff; text-decoration: none; }
-    a:hover { text-decoration: underline; }
-  </style>
+<!-- Globe.gl -->
+<script src="https://unpkg.com/three-globe@2.30.0"></script>
+
+<style>
+  html, body {
+    margin:0; padding:0; height:100%;
+    background:#0a1d33; color:#fff;
+    overflow:hidden; font-family:"Segoe UI", sans-serif;
+  }
+
+  .topbar {
+    position:fixed; top:0; left:0; right:0; height:56px;
+    background:rgba(10,29,51,0.85); backdrop-filter:blur(4px);
+    display:flex; align-items:center; padding:0 16px; z-index:10;
+    border-bottom:1px solid rgba(255,255,255,0.08);
+  }
+
+  .brand { display:flex; align-items:center; gap:10px; font-weight:600; }
+  .brand img { width:28px; height:28px; }
+
+  #globe { position:absolute; top:56px; left:0; right:0; bottom:0; }
+
+  .legend {
+    position: fixed; bottom: 18px; left: 16px; z-index: 11;
+    background: rgba(0,0,0,.45); padding: 10px 12px; border-radius: 10px;
+    border: 1px solid rgba(255,255,255,.12); font-size: 13px;
+  }
+  .legend .bar {
+    width: 240px; height: 10px; border-radius: 6px; margin-top: 6px;
+    background: linear-gradient(90deg, #2ecc71, #f1c40f, #e67e22, #e74c3c);
+  }
+  .legend .ticks { display:flex; justify-content:space-between; opacity:.9; }
+
+  .dock {
+    position:fixed; right:16px; bottom:16px; z-index:11; display:grid; gap:8px;
+  }
+
+  .chip {
+    background:rgba(255,255,255,0.06);
+    border:1px solid rgba(255,255,255,0.1);
+    padding:8px 10px; border-radius:999px; font-size:12px;
+  }
+
+  a { color:#7bc7ff; text-decoration:none; }
+  a:hover { text-decoration:underline; }
+</style>
+
 </head>
 <body>
-  <!-- Barra superior -->
-  <div class="topbar">
-    <div class="brand">
-      <img src="assets/logo-mre.png" alt="Logo" />
-      <span>Sistema IA — Panel de Control (Maqueta)</span>
-    </div>
+
+<div class="topbar">
+  <div class="brand">
+    <img src="assets/logo-mre.png">
+    <span>Sistema IA — Panel de Control (Maqueta)</span>
   </div>
+</div>
 
-  <!-- Contenedor del globo -->
-  <div id="globe"></div>
+<div id="globe"></div>
 
-  <!-- Leyenda verde→rojo -->
-  <div class="legend">
-    <div><strong>Escala 24h</strong> — Estable → Riesgo</div>
-    <div class="bar"></div>
-    <div class="ticks"><span>Verde</span><span>Amarillo</span><span>Naranja</span><span>Rojo</span></div>
-  </div>
+<div class="legend">
+  <div><strong>Escala 24h</strong> — Estable → Riesgo</div>
+  <div class="bar"></div>
+  <div class="ticks"><span>Verde</span><span>Amarillo</span><span>Naranja</span><span>Rojo</span></div>
+</div>
 
-  <!-- Estado simulado -->
-  <div class="dock">
-    <div class="chip">Fuente: datos de ejemplo (maqueta)</div>
-    <div class="chip"><a href="index.html">← Volver al login</a></div>
-  </div>
+<div class="dock">
+  <div class="chip">Datos simulados</div>
+  <div class="chip"><a href="index.html">← Volver</a></div>
+</div>
 
-  <script>
-    // Texturas realistas (CDN de three-globe)
-    const EARTH_IMG = 'https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg';
-    const BUMP_IMG  = 'https://unpkg.com/three-globe/example/img/earth-topology.png';
-    const BG_IMG    = 'https://unpkg.com/three-globe/example/img/night-sky.png';
+<script>
+// Texturas
+const EARTH_IMG = 'https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg';
+const BUMP_IMG  = 'https://unpkg.com/three-globe/example/img/earth-topology.png';
+const BG_IMG    = 'https://unpkg.com/three-globe/example/img/night-sky.png';
 
-    // Contenedor
-    const container = document.getElementById('globe');
+// Setup escena
+const container = document.getElementById("globe");
+const renderer = new THREE.WebGLRenderer({ antialias:true });
+renderer.setSize(container.offsetWidth, container.offsetHeight);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+container.appendChild(renderer.domElement);
 
-    // Renderer + escena + cámara
-    const renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setSize(container.offsetWidth, container.offsetHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    container.appendChild(renderer.domElement);
+const scene = new THREE.Scene();
+scene.background = new THREE.TextureLoader().load(BG_IMG);
 
-    const scene = new THREE.Scene();
-    scene.background = new THREE.TextureLoader().load(BG_IMG);
+const camera = new THREE.PerspectiveCamera(45, container.offsetWidth/container.offsetHeight,0.1,2000);
+camera.position.set(0,0,350);
 
-    const camera = new THREE.PerspectiveCamera(45, container.offsetWidth / container.offsetHeight, 0.1, 2000);
-    camera.position.set(0, 0, 350);
+scene.add(new THREE.AmbientLight(0xffffff,0.9));
+const dirLight = new THREE.DirectionalLight(0xffffff,0.6);
+dirLight.position.set(1,1,1);
+scene.add(dirLight);
 
-    // Luces
-    scene.add(new THREE.AmbientLight(0xffffff, 0.9));
-    const dirLight = new THREE.DirectionalLight(0xffffff, 0.6);
-    dirLight.position.set(1, 1, 1);
-    scene.add(dirLight);
+const globe = new ThreeGlobe()
+  .globeImageUrl(EARTH_IMG)
+  .bumpImageUrl(BUMP_IMG)
+  .showAtmosphere(true)
+  .atmosphereColor('#88ccff')
+  .atmosphereAltitude(0.18);
 
-    // Globo
-    const globe = new ThreeGlobe()
-      .globeImageUrl(EARTH_IMG)
-      .bumpImageUrl(BUMP_IMG)
-      .showAtmosphere(true)
-      .atmosphereColor('#88ccff')
-      .atmosphereAltitude(0.18)
-      .hexPolygonsData([]) // evitamos puntos por ahora
-      .polygonsTransitionDuration(600);
+scene.add(globe);
 
-    scene.add(globe);
+// Datos riesgo maqueta
+const riskByCountry = {
+  "Venezuela":0.90,
+  "Ukraine":0.80,
+  "Israel":0.75,
+  "Iran":0.70
+};
 
-    // Importar OrbitControls desde CDN
-const controlsScript = document.createElement("script");
-controlsScript.src = "https://unpkg.com/three@0.160.0/examples/js/controls/OrbitControls.js";
-controlsScript.onload = () => {
-  // Controles de cámara
+function valueToColor(v){
+  const hue = (1 - Math.max(0, Math.min(1, v))) * 120;
+  return `hsl(${hue},85%,50%)`;
+}
+
+// Cargar mapa países
+const WORLD = "https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson";
+
+fetch(WORLD)
+.then(r=>r.json())
+.then(world=>{
+  const features = world.features;
+
+  features.forEach(f=>{
+    const name = f.properties.name;
+    f.__value = riskByCountry[name] ?? 0.18;
+  });
+
+  globe
+    .polygonsData(features)
+    .polygonCapColor(f => valueToColor(f.__value))
+    .polygonSideColor(()=>"rgba(255,255,255,0.15)")
+    .polygonStrokeColor(()=>"rgba(0,0,0,0.4)")
+    .polygonAltitude(f => 0.01 + f.__value * 0.03);
+
+  // CLICK — abrir detalle si está en riesgo alto
+  globe.onPolygonClick(f=>{
+    const name = f.properties.name;
+    const v = f.__value;
+    if(v >= 0.70){
+      window.location.href = `pais.html?name=${encodeURIComponent(name)}`;
+    }
+  });
+});
+
+// OrbitControls
+const controlsScript=document.createElement("script");
+controlsScript.src="https://unpkg.com/three@0.160.0/examples/js/controls/OrbitControls.js";
+controlsScript.onload=()=>{
+
   const controls = new THREE.OrbitControls(camera, renderer.domElement);
-  controls.enableZoom = true;
-  controls.enablePan = false;
-  controls.minDistance = 150;
-  controls.maxDistance = 500;
+  controls.enableZoom=true;
+  controls.enablePan=false;
+  controls.minDistance=150;
+  controls.maxDistance=700;
 
-  // Rotación automática
-  const rotateSpeed = 0.15;
-  function autoRotate() {
-    globe.rotation.y += rotateSpeed * 0.001; 
+  // rotación automática
+  const speed = 0.15;
+  function autoRotate(){
+    globe.rotation.y += speed * 0.0025;
     requestAnimationFrame(autoRotate);
   }
   autoRotate();
 };
 document.head.appendChild(controlsScript);
 
+// loop render
+function animate(){
+  requestAnimationFrame(animate);
+  renderer.render(scene,camera);
+}
+animate();
 
-    // --- Datos MAQUETA: valores por país (0 = verde, 1 = rojo)
-    // Puedes ajustar libremente estos valores.
-    const riskByCountry = {
-      'Peru': 0.70,
-      'Chile': 0.25,
-      'Argentina': 0.55,
-      'Brazil': 0.40,
-      'Colombia': 0.35,
-      'Venezuela': 0.90,
-      'United States of America': 0.20,
-      'Mexico': 0.45,
-      'Spain': 0.30,
-      'France': 0.35,
-      'Germany': 0.20,
-      'United Kingdom': 0.25,
-      'Russia': 0.65,
-      'China': 0.50,
-      'India': 0.45,
-      'South Africa': 0.40,
-      'Australia': 0.15,
-      'Ukraine': 0.80,
-      'Israel': 0.75,
-      'Iran': 0.70,
-      'Turkey': 0.55
-    };
+// resize
+window.addEventListener("resize",()=>{
+  const w=container.offsetWidth, h=container.offsetHeight;
+  camera.aspect=w/h;
+  camera.updateProjectionMatrix();
+  renderer.setSize(w,h);
+});
+</script>
 
-    // Función color: de verde (0) a rojo (1) pasando por amarillos/naranjas
-    function valueToColor(v) {
-      // Interpolación HSL: 120° (verde) → 0° (rojo)
-      const hue = (1 - Math.max(0, Math.min(1, v))) * 120; // clamp & map
-      return `hsl(${hue}, 85%, 50%)`;
-    }
-
-    // Cargar geometría de países (GeoJSON de países)
-    // Nota: Es un dataset público simple para maqueta.
-    const WORLD_GEOJSON =
-      'https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson';
-
-    fetch(WORLD_GEOJSON)
-      .then(res => res.json())
-      .then(world => {
-        const features = world.features || [];
-        // Asignar valor simulado a cada país por su 'name'
-        features.forEach(f => {
-          const name = f.properties && (f.properties.name || f.properties.NAME);
-          const v = riskByCountry[name] ?? 0.18; // valor por defecto bajo
-          f.__value = v;
-        });
-
-        globe
-          .polygonsData(features)
-          .polygonCapColor(f => valueToColor(f.__value))
-          .polygonSideColor(() => 'rgba(255,255,255,0.15)')
-          .polygonStrokeColor(() => '#111')
-          .polygonAltitude(f => 0.02 + f.__value * 0.03) // un poco más alto si hay más “riesgo”
-          .polygonLabel(f => {
-            const name = f.properties && (f.properties.name || f.properties.NAME);
-            const v = (f.__value * 100).toFixed(0);
-            return `<div style="font-size:12px; line-height:1.4">
-              <b>${name}</b><br/>
-              Índice 24h: <b>${v}</b>/100
-            </div>`;
-          });
-      });
-
-    // Animación render
-    (function animate() {
-      requestAnimationFrame(animate);
-      controls.update();
-      renderer.render(scene, camera);
-    })();
-
-    // Responsivo
-    window.addEventListener('resize', () => {
-      const w = container.offsetWidth, h = container.offsetHeight;
-      camera.aspect = w / h;
-      camera.updateProjectionMatrix();
-      renderer.setSize(w, h);
-    });
-  </script>
 </body>
 </html>
