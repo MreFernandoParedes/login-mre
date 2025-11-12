@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8" />
+<meta charset="UTF-8">
 <title>Sistema IA — Panel de Control</title>
 <style>
     body, html {
@@ -22,35 +22,32 @@
 
 <div id="globe"></div>
 
-<!-- ✅ SCRIPT CORRECTO: MÓDULOS DESDE CDN -->
 <script type="module">
-
+// ✅ IMPORTAR THREE DESDE CDN (CORRECTO)
 import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js";
 import { OrbitControls } from "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/controls/OrbitControls.js";
 import { GLTFLoader } from "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/loaders/GLTFLoader.js";
 
-// 🚀 Escena
+console.log("✅ Dashboard cargado correctamente");
+
+// 🌍 ESCENA
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
 camera.position.set(0, 0, 3);
 
-// 🎥 Render
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.getElementById("globe").appendChild(renderer.domElement);
 
-// 🎮 Controles correctos
+// 🎮 CONTROLES
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 controls.enableZoom = true;
-controls.rotateSpeed = 0.6;
 
-// 💡 Luces
-const light = new THREE.DirectionalLight(0xffffff, 2);
-light.position.set(3, 3, 3);
-scene.add(light);
+// 💡 LUZ
+scene.add(new THREE.DirectionalLight(0xffffff, 2));
 
-// 🌍 Cargar modelo glTF Tierra
+// 🌐 CARGAR TIERRA
 const loader = new GLTFLoader();
 let globeMesh;
 
@@ -58,9 +55,9 @@ loader.load(
   "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Earth/glTF/Earth.gltf",
   gltf => {
     globeMesh = gltf.scene;
-    globeMesh.scale.set(1, 1, 1);
     scene.add(globeMesh);
 
+    // Datos ficticios de riesgo
     const riesgo = {
       Venezuela: "red",
       Ukraine: "red",
@@ -72,9 +69,7 @@ loader.load(
       globeMesh.traverse(obj => {
         if (obj.isMesh && obj.name) {
           Object.entries(riesgo).forEach(([pais, color]) => {
-            if (obj.name.includes(pais)) {
-              obj.material.color.set(color);
-            }
+            if (obj.name.includes(pais)) obj.material.color.set(color);
           });
         }
       });
@@ -82,7 +77,7 @@ loader.load(
   }
 );
 
-// 🖱️ Click en países
+// 🎯 DETECCIÓN CLICK
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
 
@@ -96,7 +91,6 @@ renderer.domElement.addEventListener("click", e => {
   if (hit.length > 0) {
     const obj = hit[0].object;
     const paises = ["Venezuela", "Ukraine", "Israel", "Iran"];
-
     for (const p of paises) {
       if (obj.name.includes(p)) {
         window.location.href = `pais.html?name=${encodeURIComponent(p)}`;
@@ -105,7 +99,7 @@ renderer.domElement.addEventListener("click", e => {
   }
 });
 
-// 🔁 Animación
+// 🔁 LOOP
 function animate() {
   requestAnimationFrame(animate);
   controls.update();
@@ -113,11 +107,13 @@ function animate() {
 }
 animate();
 
+// 📐 REDIMENSIÓN
 window.addEventListener("resize", () => {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
 });
 </script>
+
 </body>
 </html>
