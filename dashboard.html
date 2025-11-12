@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sistema IA — Países interactivos</title>
+  <title>Sistema IA — Países iluminados</title>
   <style>
     body, html {
       margin: 0;
@@ -30,12 +30,11 @@
   }
   </script>
 
-  <!-- Código principal -->
   <script type="module">
     import * as THREE from "three";
     import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
-    console.log("🌎 Iniciando globo interactivo...");
+    console.log("🌍 Render interactivo cargado");
 
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -45,38 +44,47 @@
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.getElementById("globe").appendChild(renderer.domElement);
 
-    const light = new THREE.DirectionalLight(0xffffff, 2);
-    light.position.set(5, 3, 5);
-    scene.add(light);
-    scene.add(new THREE.AmbientLight(0x404040, 1.5));
+    // 💡 Iluminación mejorada
+    const dirLight = new THREE.DirectionalLight(0xffffff, 1.8);
+    dirLight.position.set(5, 3, 5);
+    scene.add(dirLight);
 
-    const controls = new OrbitControls(camera, renderer.domElement);
-    controls.enableDamping = true;
+    const hemiLight = new THREE.HemisphereLight(0xaaaaee, 0x080820, 1.5);
+    scene.add(hemiLight);
 
     // 🌐 Textura base
     const textureLoader = new THREE.TextureLoader();
     const earthTexture = textureLoader.load("https://cdn.jsdelivr.net/gh/turban/webgl-earth@master/images/2_no_clouds_4k.jpg");
+    const earthNight = textureLoader.load("https://eoimages.gsfc.nasa.gov/images/imagerecords/55000/55167/earth_lights_lrg.jpg");
 
-    const earth = new THREE.Mesh(
-      new THREE.SphereGeometry(1, 64, 64),
-      new THREE.MeshPhongMaterial({ map: earthTexture })
-    );
+    const material = new THREE.MeshPhongMaterial({
+      map: earthTexture,
+      emissiveMap: earthNight,
+      emissive: new THREE.Color(0x222244),
+      emissiveIntensity: 0.6
+    });
+
+    const earth = new THREE.Mesh(new THREE.SphereGeometry(1, 64, 64), material);
     scene.add(earth);
 
-    // 🎯 Raycaster y mouse
+    // 🎮 Controles
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+
+    // 🎯 Raycasting
     const raycaster = new THREE.Raycaster();
     const mouse = new THREE.Vector2();
     let selectedCountry = null;
 
-    // 🔹 Cargar países (GeoJSON)
+    // 🔹 Cargar países desde GeoJSON
     fetch("https://cdn.jsdelivr.net/gh/johan/world.geo.json/world.geo.json")
       .then(res => res.json())
       .then(data => {
         data.features.forEach((feature, i) => {
-          const color = new THREE.Color(0x0088ff);
-          const countryMesh = drawCountry(feature, color);
-          countryMesh.userData = { name: feature.properties.name };
-          scene.add(countryMesh);
+          const color = new THREE.Color(`hsl(${(i * 15) % 360}, 60%, 50%)`);
+          const mesh = drawCountry(feature, color);
+          mesh.userData = { name: feature.properties.name };
+          scene.add(mesh);
         });
       });
 
@@ -111,7 +119,7 @@
       const material = new THREE.MeshBasicMaterial({
         color,
         transparent: true,
-        opacity: 0.35,
+        opacity: 0.6,
         side: THREE.DoubleSide
       });
 
@@ -121,7 +129,7 @@
       return mesh;
     }
 
-    // 🖱️ Detectar clics
+    // 🖱️ Click para abrir país
     window.addEventListener("click", (event) => {
       const rect = renderer.domElement.getBoundingClientRect();
       mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
@@ -135,25 +143,17 @@
         const countryName = obj.parent?.userData?.name || obj.userData?.name;
 
         if (countryName) {
-          console.log("🌍 País seleccionado:", countryName);
-
-          // Restaurar color anterior
-          if (selectedCountry) {
-            selectedCountry.material.color.set(0x0088ff);
-          }
-
-          // Nuevo país
+          if (selectedCountry) selectedCountry.material.opacity = 0.6;
           selectedCountry = obj;
-          selectedCountry.material.color.set(0xffff00);
+          selectedCountry.material.opacity = 1.0;
 
-          // Abrir nueva página (país.html)
           const encoded = encodeURIComponent(countryName);
           window.location.href = `pais.html?nombre=${encoded}`;
         }
       }
     });
 
-    // 🎥 Animación
+    // 🔁 Animación
     function animate() {
       requestAnimationFrame(animate);
       earth.rotation.y += 0.0008;
