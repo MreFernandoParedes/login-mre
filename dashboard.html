@@ -1,109 +1,56 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="utf-8">
-<title>Panel de Control — Sistema IA</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
-<!-- THREE.js -->
-<script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
-
-<!-- Globe.gl -->
-<script src="https://unpkg.com/three-globe@2.30.0"></script>
-
+<meta charset="UTF-8" />
+<title>Sistema IA — Panel de Control</title>
 <style>
-  html, body {
-    margin:0; padding:0; height:100%;
-    background:#0a1d33; color:#fff;
-    overflow:hidden; font-family:"Segoe UI", sans-serif;
-  }
-
-  .topbar {
-    position:fixed; top:0; left:0; right:0; height:56px;
-    background:rgba(10,29,51,0.85); backdrop-filter:blur(4px);
-    display:flex; align-items:center; padding:0 16px; z-index:10;
-    border-bottom:1px solid rgba(255,255,255,0.08);
-  }
-
-  .brand { display:flex; align-items:center; gap:10px; font-weight:600; }
-  .brand img { width:28px; height:28px; }
-
-  #globe { position:absolute; top:56px; left:0; right:0; bottom:0; }
-
-  .legend {
-    position: fixed; bottom: 18px; left: 16px; z-index: 11;
-    background: rgba(0,0,0,.45); padding: 10px 12px; border-radius: 10px;
-    border: 1px solid rgba(255,255,255,.12); font-size: 13px;
-  }
-  .legend .bar {
-    width: 240px; height: 10px; border-radius: 6px; margin-top: 6px;
-    background: linear-gradient(90deg, #2ecc71, #f1c40f, #e67e22, #e74c3c);
-  }
-  .legend .ticks { display:flex; justify-content:space-between; opacity:.9; }
-
-  .dock {
-    position:fixed; right:16px; bottom:16px; z-index:11; display:grid; gap:8px;
-  }
-
-  .chip {
-    background:rgba(255,255,255,0.06);
-    border:1px solid rgba(255,255,255,0.1);
-    padding:8px 10px; border-radius:999px; font-size:12px;
-  }
-
-  a { color:#7bc7ff; text-decoration:none; }
-  a:hover { text-decoration:underline; }
+    body, html {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background: #001a33;
+        font-family: "Segoe UI", sans-serif;
+        color: white;
+    }
+    #globe {
+        width: 100vw;
+        height: 100vh;
+    }
 </style>
-
 </head>
 <body>
 
-<div class="topbar">
-  <div class="brand">
-    <img src="assets/logo-mre.png">
-    <span>Sistema IA — Panel de Control (Maqueta)</span>
-  </div>
-</div>
-
 <div id="globe"></div>
 
-<div class="legend">
-  <div><strong>Escala 24h</strong> — Estable → Riesgo</div>
-  <div class="bar"></div>
-  <div class="ticks"><span>Verde</span><span>Amarillo</span><span>Naranja</span><span>Rojo</span></div>
-</div>
-
-<div class="dock">
-  <div class="chip">Datos simulados</div>
-  <div class="chip"><a href="index.html">← Volver</a></div>
-</div>
-
+<!-- ✅ SCRIPT CORRECTO: MÓDULOS DESDE CDN -->
 <script type="module">
+
 import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js";
 import { OrbitControls } from "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/controls/OrbitControls.js";
 import { GLTFLoader } from "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/loaders/GLTFLoader.js";
 
-// Escena
+// 🚀 Escena
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
 camera.position.set(0, 0, 3);
 
+// 🎥 Render
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.getElementById("globe").appendChild(renderer.domElement);
 
-// ✅ Crear controles correctamente
+// 🎮 Controles correctos
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 controls.enableZoom = true;
 controls.rotateSpeed = 0.6;
 
-// Luz
+// 💡 Luces
 const light = new THREE.DirectionalLight(0xffffff, 2);
 light.position.set(3, 3, 3);
 scene.add(light);
 
-// 🌍 Cargar globo
+// 🌍 Cargar modelo glTF Tierra
 const loader = new GLTFLoader();
 let globeMesh;
 
@@ -111,9 +58,9 @@ loader.load(
   "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Earth/glTF/Earth.gltf",
   gltf => {
     globeMesh = gltf.scene;
+    globeMesh.scale.set(1, 1, 1);
     scene.add(globeMesh);
 
-    // ✅ Colorear países simulación
     const riesgo = {
       Venezuela: "red",
       Ukraine: "red",
@@ -121,13 +68,6 @@ loader.load(
       Iran: "orange"
     };
 
-    globeMesh.traverse(obj => {
-      if (obj.isMesh) {
-        obj.material = new THREE.MeshStandardMaterial({ color: "#1d6fd8" });
-      }
-    });
-
-    // simular pintado (maqueta)
     setTimeout(() => {
       globeMesh.traverse(obj => {
         if (obj.isMesh && obj.name) {
@@ -142,15 +82,15 @@ loader.load(
   }
 );
 
-// ✅ Click en países
+// 🖱️ Click en países
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
 
 renderer.domElement.addEventListener("click", e => {
   mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
   mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
-
   raycaster.setFromCamera(mouse, camera);
+
   const hit = raycaster.intersectObjects(scene.children, true);
 
   if (hit.length > 0) {
@@ -165,7 +105,7 @@ renderer.domElement.addEventListener("click", e => {
   }
 });
 
-// Animación
+// 🔁 Animación
 function animate() {
   requestAnimationFrame(animate);
   controls.update();
@@ -173,14 +113,11 @@ function animate() {
 }
 animate();
 
-// Responsivo
 window.addEventListener("resize", () => {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
 });
 </script>
-
-
 </body>
 </html>
