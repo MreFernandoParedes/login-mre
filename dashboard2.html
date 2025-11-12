@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Sistema IA — Panel de Control</title>
+<style>
+    body, html {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background: #001a33;
+        font-family: "Segoe UI", sans-serif;
+        color: white;
+    }
+    #globe {
+        width: 100vw;
+        height: 100vh;
+    }
+</style>
+</head>
+<body>
+
+<div id="globe"></div>
+
+<script type="module">
+// ✅ IMPORTAR THREE DESDE CDN (CORRECTO)
+import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js";
+import { OrbitControls } from "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/controls/OrbitControls.js";
+import { GLTFLoader } from "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/loaders/GLTFLoader.js";
+
+console.log("✅ Dashboard cargado correctamente");
+
+// 🌍 ESCENA
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+camera.position.set(0, 0, 3);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.getElementById("globe").appendChild(renderer.domElement);
+
+// 🎮 CONTROLES
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.enableZoom = true;
+
+// 💡 LUZ
+scene.add(new THREE.DirectionalLight(0xffffff, 2));
+
+// 🌐 CARGAR TIERRA
+const loader = new GLTFLoader();
+let globeMesh;
+
+loader.load(
+  "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Earth/glTF/Earth.gltf",
+  gltf => {
+    globeMesh = gltf.scene;
+    scene.add(globeMesh);
+
+    // Datos ficticios de riesgo
+    const riesgo = {
+      Venezuela: "red",
+      Ukraine: "red",
+      Israel: "orange",
+      Iran: "orange"
+    };
+
+    setTimeout(() => {
+      globeMesh.traverse(obj => {
+        if (obj.isMesh && obj.name) {
+          Object.entries(riesgo).forEach(([pais, color]) => {
+            if (obj.name.includes(pais)) obj.material.color.set(color);
+          });
+        }
+      });
+    }, 800);
+  }
+);
+
+// 🎯 DETECCIÓN CLICK
+const raycaster = new THREE.Raycaster();
+const mouse = new THREE.Vector2();
+
+renderer.domElement.addEventListener("click", e => {
+  mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+  mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+  raycaster.setFromCamera(mouse, camera);
+
+  const hit = raycaster.intersectObjects(scene.children, true);
+
+  if (hit.length > 0) {
+    const obj = hit[0].object;
+    const paises = ["Venezuela", "Ukraine", "Israel", "Iran"];
+    for (const p of paises) {
+      if (obj.name.includes(p)) {
+        window.location.href = `pais.html?name=${encodeURIComponent(p)}`;
+      }
+    }
+  }
+});
+
+// 🔁 LOOP
+function animate() {
+  requestAnimationFrame(animate);
+  controls.update();
+  renderer.render(scene, camera);
+}
+animate();
+
+// 📐 REDIMENSIÓN
+window.addEventListener("resize", () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+</script>
+
+</body>
+</html>
