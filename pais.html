@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Detalle País — Sistema IA</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+body {
+  margin:0; padding:0;
+  background:#0a1d33; color:white;
+  font-family:"Segoe UI", sans-serif;
+}
+.container {
+  max-width:800px; margin:40px auto; padding:20px;
+  background:rgba(255,255,255,0.05);
+  border:1px solid rgba(255,255,255,0.12);
+  border-radius:12px;
+}
+h1 { margin-top:0; }
+.flag {
+  width:90px; border-radius:5px;
+  border:1px solid rgba(255,255,255,0.2);
+}
+.section {
+  margin-top:20px; padding:15px;
+  background:rgba(0,0,0,0.25);
+  border-radius:8px;
+}
+.badge {
+  background:#e74c3c; padding:6px 12px;
+  border-radius:999px; font-size:13px;
+}
+.back {
+  display:inline-block;
+  margin-top:20px; padding:10px 18px;
+  background:#1b74d0; color:white;
+  border-radius:6px; text-decoration:none;
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+  <h1 id="pais-nombre">Cargando país...</h1>
+  <img id="flag" class="flag" src="" alt="Bandera">
+
+  <div class="section">
+    <span class="badge">Alerta Nivel Alto</span>
+    <p id="contexto"></p>
+  </div>
+
+  <div class="section">
+    <h3>Embajador</h3>
+    <p id="embajador"></p>
+  </div>
+
+  <div class="section">
+    <h3>Resumen Situación</h3>
+    <ul id="detalles"></ul>
+  </div>
+
+  <div class="section">
+    <h3>Datos Embajada</h3>
+    <ul id="datosEmbajada"></ul>
+  </div>
+
+  <a class="back" href="dashboard.html">← Volver al panel</a>
+</div>
+
+<script>
+// Datos simulados
+const paisInfo = {
+  "Venezuela": {
+    bandera:"https://flagcdn.com/w320/ve.png",
+    contexto:"Tensión política sostenida, sanciones económicas, presión social y disturbios recientes.",
+    embajador:"Emb. *Nombre Ejemplo*",
+    detalles:[
+      "Protestas en sectores urbanos",
+      "Desabastecimiento reportado",
+      "Declaraciones críticas de la oposición"
+    ],
+    embajada:[
+      "Funcionarios: 25",
+      "Personal local: 42",
+      "Alertas consulares activas: 12"
+    ]
+  },
+  "Ukraine": {
+    bandera:"https://flagcdn.com/w320/ua.png",
+    contexto:"Conflicto armado en curso, inestabilidad regional, impactos humanitarios severos.",
+    embajador:"Emb. *Nombre Ejemplo*",
+    detalles:[
+      "Actividad militar en zona este",
+      "Solicitudes de evacuación atendidas",
+      "Movimientos diplomáticos activos"
+    ],
+    embajada:[
+      "Funcionarios: 18",
+      "Personal local: 30",
+      "Evacuaciones recientes: 3"
+    ]
+  },
+  "Israel": {
+    bandera:"https://flagcdn.com/w320/il.png",
+    contexto:"Escalada de tensión con grupos armados, medidas de seguridad reforzadas.",
+    embajador:"Emb. *Nombre Ejemplo*",
+    detalles:[
+      "Ataques aislados",
+      "Incremento de presencia militar",
+      "Recomendaciones de viaje actualizadas"
+    ],
+    embajada:[
+      "Funcionarios: 22",
+      "Personal local: 55",
+      "Alertas de seguridad: 5"
+    ]
+  },
+  "Iran": {
+    bandera:"https://flagcdn.com/w320/ir.png",
+    contexto:"Sanciones internacionales, protestas internas, situación política volátil.",
+    embajador:"Emb. *Nombre Ejemplo*",
+    detalles:[
+      "Manifestaciones aisladas",
+      "Restricciones gubernamentales",
+      "Actividad diplomática tensa"
+    ],
+    embajada:[
+      "Funcionarios: 14",
+      "Personal local: 20",
+      "Alertas consulares: 8"
+    ]
+  }
+};
+
+// Obtener país desde URL
+const params = new URLSearchParams(window.location.search);
+const pais = params.get("name");
+
+// Mostrar info
+const data = paisInfo[pais];
+if(data){
+  document.getElementById("pais-nombre").textContent = pais;
+  document.getElementById("flag").src = data.bandera;
+  document.getElementById("contexto").textContent = data.contexto;
+  document.getElementById("embajador").textContent = data.embajador;
+
+  data.detalles.forEach(t => {
+    const li = document.createElement("li");
+    li.textContent = t;
+    document.getElementById("detalles").appendChild(li);
+  });
+
+  data.embajada.forEach(t => {
+    const li = document.createElement("li");
+    li.textContent = t;
+    document.getElementById("datosEmbajada").appendChild(li);
+  });
+
+} else {
+  document.getElementById("pais-nombre").textContent = "País no registrado";
+}
+</script>
+
+</body>
+</html>
