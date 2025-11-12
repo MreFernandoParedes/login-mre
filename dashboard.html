@@ -3,12 +3,26 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Prueba de Módulos — Three.js</title>
+  <title>Sistema IA — Panel de Control</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background: #001a33;
+      color: white;
+      font-family: "Segoe UI", sans-serif;
+    }
+    #globe {
+      width: 100vw;
+      height: 100vh;
+    }
+  </style>
 </head>
-<body style="background:#001a33;color:white;font-family:sans-serif;">
-  <h2 style="text-align:center;margin-top:40vh;">Probando carga de módulos...</h2>
+<body>
+  <div id="globe"></div>
 
-  <!-- 👇 Import Map: mapea 'three' y los 'addons' al CDN -->
+  <!-- Import Map -->
   <script type="importmap">
   {
     "imports": {
@@ -18,15 +32,50 @@
   }
   </script>
 
-  <!-- Script de prueba -->
+  <!-- Código principal -->
   <script type="module">
-    console.log("🔍 Iniciando prueba de módulos...");
-
     import * as THREE from "three";
     import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-    import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 
-    console.log("✅ Módulos OK:", THREE.REVISION, { OrbitControls: !!OrbitControls, GLTFLoader: !!GLTFLoader });
+    console.log("🌍 Iniciando renderizador...");
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.set(0, 0, 3);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.getElementById("globe").appendChild(renderer.domElement);
+
+    // Luz
+    const light = new THREE.DirectionalLight(0xffffff, 2);
+    scene.add(light);
+
+    // Esfera que representará la Tierra
+    const geometry = new THREE.SphereGeometry(1, 32, 32);
+    const material = new THREE.MeshStandardMaterial({ color: 0x0077ff, roughness: 0.7, metalness: 0.3 });
+    const earth = new THREE.Mesh(geometry, material);
+    scene.add(earth);
+
+    // Controles orbitales
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+
+    // Animación
+    function animate() {
+      requestAnimationFrame(animate);
+      earth.rotation.y += 0.001;
+      controls.update();
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    // Adaptar al tamaño de ventana
+    window.addEventListener("resize", () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
   </script>
 </body>
 </html>
