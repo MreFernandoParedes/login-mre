@@ -1,23 +1,32 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Prueba de Módulos — Three.js</title>
 </head>
 <body style="background:#001a33;color:white;font-family:sans-serif;">
   <h2 style="text-align:center;margin-top:40vh;">Probando carga de módulos...</h2>
 
- <script type="module">
-console.log("🔍 Iniciando prueba de módulos...");
+  <!-- 👇 Import Map: mapea 'three' y los 'addons' al CDN -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+    }
+  }
+  </script>
 
-import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js";
-import { OrbitControls } from "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/controls/OrbitControls.js";
-import { GLTFLoader } from "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/loaders/GLTFLoader.js";
+  <!-- Script de prueba -->
+  <script type="module">
+    console.log("🔍 Iniciando prueba de módulos...");
 
-console.log("✅ Módulos OK:", THREE.REVISION);
-</script>
+    import * as THREE from "three";
+    import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+    import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 
-  
+    console.log("✅ Módulos OK:", THREE.REVISION, { OrbitControls: !!OrbitControls, GLTFLoader: !!GLTFLoader });
+  </script>
 </body>
 </html>
