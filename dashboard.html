@@ -78,118 +78,109 @@
   <div class="chip"><a href="index.html">← Volver</a></div>
 </div>
 
-<script>
-// Texturas
-const EARTH_IMG = 'https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg';
-const BUMP_IMG  = 'https://unpkg.com/three-globe/example/img/earth-topology.png';
-const BG_IMG    = 'https://unpkg.com/three-globe/example/img/night-sky.png';
+<script type="module">
+import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js";
+import { OrbitControls } from "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/controls/OrbitControls.js";
+import { GLTFLoader } from "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/loaders/GLTFLoader.js";
 
-// Setup escena
-const container = document.getElementById("globe");
-const renderer = new THREE.WebGLRenderer({ antialias:true });
-renderer.setSize(container.offsetWidth, container.offsetHeight);
-renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
-container.appendChild(renderer.domElement);
-
+// Escena
 const scene = new THREE.Scene();
-scene.background = new THREE.TextureLoader().load(BG_IMG);
+const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+camera.position.set(0, 0, 3);
 
-const camera = new THREE.PerspectiveCamera(45, container.offsetWidth/container.offsetHeight,0.1,2000);
-camera.position.set(0,0,350);
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.getElementById("globe").appendChild(renderer.domElement);
 
-scene.add(new THREE.AmbientLight(0xffffff,0.9));
-const dirLight = new THREE.DirectionalLight(0xffffff,0.6);
-dirLight.position.set(1,1,1);
-scene.add(dirLight);
+// ✅ Crear controles correctamente
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.enableZoom = true;
+controls.rotateSpeed = 0.6;
 
-const globe = new ThreeGlobe()
-  .globeImageUrl(EARTH_IMG)
-  .bumpImageUrl(BUMP_IMG)
-  .showAtmosphere(true)
-  .atmosphereColor('#88ccff')
-  .atmosphereAltitude(0.18);
+// Luz
+const light = new THREE.DirectionalLight(0xffffff, 2);
+light.position.set(3, 3, 3);
+scene.add(light);
 
-scene.add(globe);
+// 🌍 Cargar globo
+const loader = new GLTFLoader();
+let globeMesh;
 
-// Datos riesgo maqueta
-const riskByCountry = {
-  "Venezuela":0.90,
-  "Ukraine":0.80,
-  "Israel":0.75,
-  "Iran":0.70
-};
+loader.load(
+  "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Earth/glTF/Earth.gltf",
+  gltf => {
+    globeMesh = gltf.scene;
+    scene.add(globeMesh);
 
-function valueToColor(v){
-  const hue = (1 - Math.max(0, Math.min(1, v))) * 120;
-  return `hsl(${hue},85%,50%)`;
-}
+    // ✅ Colorear países simulación
+    const riesgo = {
+      Venezuela: "red",
+      Ukraine: "red",
+      Israel: "orange",
+      Iran: "orange"
+    };
 
-// Cargar mapa países
-const WORLD = "https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson";
+    globeMesh.traverse(obj => {
+      if (obj.isMesh) {
+        obj.material = new THREE.MeshStandardMaterial({ color: "#1d6fd8" });
+      }
+    });
 
-fetch(WORLD)
-.then(r=>r.json())
-.then(world=>{
-  const features = world.features;
+    // simular pintado (maqueta)
+    setTimeout(() => {
+      globeMesh.traverse(obj => {
+        if (obj.isMesh && obj.name) {
+          Object.entries(riesgo).forEach(([pais, color]) => {
+            if (obj.name.includes(pais)) {
+              obj.material.color.set(color);
+            }
+          });
+        }
+      });
+    }, 800);
+  }
+);
 
-  features.forEach(f=>{
-    const name = f.properties.name;
-    f.__value = riskByCountry[name] ?? 0.18;
-  });
+// ✅ Click en países
+const raycaster = new THREE.Raycaster();
+const mouse = new THREE.Vector2();
 
-  globe
-    .polygonsData(features)
-    .polygonCapColor(f => valueToColor(f.__value))
-    .polygonSideColor(()=>"rgba(255,255,255,0.15)")
-    .polygonStrokeColor(()=>"rgba(0,0,0,0.4)")
-    .polygonAltitude(f => 0.01 + f.__value * 0.03);
+renderer.domElement.addEventListener("click", e => {
+  mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+  mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
 
-  // CLICK — abrir detalle si está en riesgo alto
-  globe.onPolygonClick(f=>{
-    const name = f.properties.name;
-    const v = f.__value;
-    if(v >= 0.70){
-      window.location.href = `pais.html?name=${encodeURIComponent(name)}`;
+  raycaster.setFromCamera(mouse, camera);
+  const hit = raycaster.intersectObjects(scene.children, true);
+
+  if (hit.length > 0) {
+    const obj = hit[0].object;
+    const paises = ["Venezuela", "Ukraine", "Israel", "Iran"];
+
+    for (const p of paises) {
+      if (obj.name.includes(p)) {
+        window.location.href = `pais.html?name=${encodeURIComponent(p)}`;
+      }
     }
-  });
+  }
 });
 
-// OrbitControls
-const controlsScript=document.createElement("script");
-controlsScript.src="https://unpkg.com/three@0.160.0/examples/js/controls/OrbitControls.js";
-controlsScript.onload=()=>{
-
-  const controls = new THREE.OrbitControls(camera, renderer.domElement);
-  controls.enableZoom=true;
-  controls.enablePan=false;
-  controls.minDistance=150;
-  controls.maxDistance=700;
-
-  // rotación automática
-  const speed = 0.15;
-  function autoRotate(){
-    globe.rotation.y += speed * 0.0025;
-    requestAnimationFrame(autoRotate);
-  }
-  autoRotate();
-};
-document.head.appendChild(controlsScript);
-
-// loop render
-function animate(){
+// Animación
+function animate() {
   requestAnimationFrame(animate);
-  renderer.render(scene,camera);
+  controls.update();
+  renderer.render(scene, camera);
 }
 animate();
 
-// resize
-window.addEventListener("resize",()=>{
-  const w=container.offsetWidth, h=container.offsetHeight;
-  camera.aspect=w/h;
+// Responsivo
+window.addEventListener("resize", () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
-  renderer.setSize(w,h);
+  renderer.setSize(window.innerWidth, window.innerHeight);
 });
 </script>
+
 
 </body>
 </html>
