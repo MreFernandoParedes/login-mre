@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tratados Comerciales del Perú - Globo 3D</title>
+    <style>
+        :root {
+  --color-white: rgba(255, 255, 255, 1);
+  --color-black: rgba(0, 0, 0, 1);
+  --color-cream-50: rgba(252, 252, 249, 1);
+  --color-cream-100: rgba(255, 255, 253, 1);
+  --color-gray-200: rgba(245, 245, 245, 1);
+  --color-gray-300: rgba(167, 169, 169, 1);
+  --color-gray-400: rgba(119, 124, 124, 1);
+  --color-slate-500: rgba(98, 108, 113, 1);
+  --color-brown-600: rgba(94, 82, 64, 1);
+  --color-charcoal-700: rgba(31, 33, 33, 1);
+  --color-charcoal-800: rgba(38, 40, 40, 1);
+  --color-slate-900: rgba(19, 52, 59, 1);
+  --color-teal-300: rgba(50, 184, 198, 1);
+  --color-teal-400: rgba(45, 166, 178, 1);
+  --color-teal-500: rgba(33, 128, 141, 1);
+  --color-teal-600: rgba(29, 116, 128, 1);
+  --color-teal-700: rgba(26, 104, 115, 1);
+  --color-teal-800: rgba(41, 150, 161, 1);
+  --color-red-400: rgba(255, 84, 89, 1);
+  --color-red-500: rgba(192, 21, 47, 1);
+  --color-orange-400: rgba(230, 129, 97, 1);
+  --color-orange-500: rgba(168, 75, 47, 1);
+
+  --color-brown-600-rgb: 94, 82, 64;
+  --color-teal-500-rgb: 33, 128, 141;
+  --color-slate-900-rgb: 19, 52, 59;
+  --color-slate-500-rgb: 98, 108, 113;
+  --color-red-500-rgb: 192, 21, 47;
+  --color-red-400-rgb: 255, 84, 89;
+  --color-orange-500-rgb: 168, 75, 47;
+  --color-orange-400-rgb: 230, 129, 97;
+
+  --color-bg-1: rgba(59, 130, 246, 0.08);
+  --color-bg-2: rgba(245, 158, 11, 0.08);
+  --color-bg-3: rgba(34, 197, 94, 0.08);
+  --color-bg-4: rgba(239, 68, 68, 0.08);
+  --color-bg-5: rgba(147, 51, 234, 0.08);
+  --color-bg-6: rgba(249, 115, 22, 0.08);
+  --color-bg-7: rgba(236, 72, 153, 0.08);
+  --color-bg-8: rgba(6, 182, 212, 0.08);
+
+  --color-background: var(--color-cream-50);
+  --color-surface: var(--color-cream-100);
+  --color-text: var(--color-slate-900);
+  --color-text-secondary: var(--color-slate-500);
+  --color-primary: var(--color-teal-500);
+  --color-primary-hover: var(--color-teal-600);
+  --color-primary-active: var(--color-teal-700);
+  --color-secondary: rgba(var(--color-brown-600-rgb), 0.12);
+  --color-secondary-hover: rgba(var(--color-brown-600-rgb), 0.2);
+  --color-secondary-active: rgba(var(--color-brown-600-rgb), 0.25);
+  --color-border: rgba(var(--color-brown-600-rgb), 0.2);
+  --color-btn-primary-text: var(--color-cream-50);
+  --color-card-border: rgba(var(--color-brown-600-rgb), 0.12);
+  --color-card-border-inner: rgba(var(--color-brown-600-rgb), 0.12);
+  --color-error: var(--color-red-500);
+  --color-success: var(--color-teal-500);
+  --color-warning: var(--color-orange-500);
+  --color-info: var(--color-slate-500);
+  --color-focus-ring: rgba(var(--color-teal-500-rgb), 0.4);
+  --color-select-caret: rgba(var(--color-slate-900-rgb), 0.8);
+
+  --focus-ring: 0 0 0 3px var(--color-focus-ring);
+  --focus-outline: 2px solid var(--color-primary);
+  --status-bg-opacity: 0.15;
+  --status-border-opacity: 0.25;
+
+  --font-family-base: "FKGroteskNeue", "Geist", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-family-mono: "Berkeley Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --font-size-xs: 11px;
+  --font-size-sm: 12px;
+  --font-size-base: 14px;
+  --font-size-md: 14px;
+  --font-size-lg: 16px;
+  --font-size-xl: 18px;
+  --font-size-2xl: 20px;
+  --font-size-3xl: 24px;
+  --font-size-4xl: 30px;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 550;
+  --font-weight-bold: 600;
+  --line-height-tight: 1.2;
+  --line-height-normal: 1.5;
+  --letter-spacing-tight: -0.01em;
+
+  --space-0: 0;
+  --space-1: 1px;
+  --space-2: 2px;
+  --space-4: 4px;
+  --space-6: 6px;
+  --space-8: 8px;
+  --space-10: 10px;
+  --space-12: 12px;
+  --space-16: 16px;
+  --space-20: 20px;
+  --space-24: 24px;
+  --space-32: 32px;
+
+  --radius-sm: 6px;
+  --radius-base: 8px;
+  --radius-md: 10px;
+  --radius-lg: 12px;
+  --radius-full: 9999px;
+
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.02);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.04), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.04), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
+  --shadow-inset-sm: inset 0 1px 0 rgba(255, 255, 255, 0.15), inset 0 -1px 0 rgba(0, 0, 0, 0.03);
+
+  --duration-fast: 150ms;
+  --duration-normal: 250ms;
+  --ease-standard: cubic-bezier(0.16, 1, 0.3, 1);
+
+  --container-sm: 640px;
+  --container-md: 768px;
+  --container-lg: 1024px;
+  --container-xl: 1280px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-gray-400-rgb: 119, 124, 124;
+    --color-teal-300-rgb: 50, 184, 198;
+    --color-gray-300-rgb: 167, 169, 169;
+    --color-gray-200-rgb: 245, 245, 245;
+
+    --color-bg-1: rgba(29, 78, 216, 0.15);
+    --color-bg-2: rgba(180, 83, 9, 0.15);
+    --color-bg-3: rgba(21, 128, 61, 0.15);
+    --color-bg-4: rgba(185, 28, 28, 0.15);
+    --color-bg-5: rgba(107, 33, 168, 0.15);
+    --color-bg-6: rgba(194, 65, 12, 0.15);
+    --color-bg-7: rgba(190, 24, 93, 0.15);
+    --color-bg-8: rgba(8, 145, 178, 0.15);
+
+    --color-background: var(--color-charcoal-700);
+    --color-surface: var(--color-charcoal-800);
+    --color-text: var(--color-gray-200);
+    --color-text-secondary: rgba(var(--color-gray-300-rgb), 0.7);
+    --color-primary: var(--color-teal-300);
+    --color-primary-hover: var(--color-teal-400);
+    --color-primary-active: var(--color-teal-800);
+    --color-secondary: rgba(var(--color-gray-400-rgb), 0.15);
+    --color-secondary-hover: rgba(var(--color-gray-400-rgb), 0.25);
+    --color-secondary-active: rgba(var(--color-gray-400-rgb), 0.3);
+    --color-border: rgba(var(--color-gray-400-rgb), 0.3);
+    --color-error: var(--color-red-400);
+    --color-success: var(--color-teal-300);
+    --color-warning: var(--color-orange-400);
+    --color-info: var(--color-gray-300);
+    --color-focus-ring: rgba(var(--color-teal-300-rgb), 0.4);
+    --color-btn-primary-text: var(--color-slate-900);
+    --color-card-border: rgba(var(--color-gray-400-rgb), 0.2);
+    --color-card-border-inner: rgba(var(--color-gray-400-rgb), 0.15);
+    --shadow-inset-sm: inset 0 1px 0 rgba(255, 255, 255, 0.1), inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+    --color-select-caret: rgba(var(--color-gray-200-rgb), 0.8);
+
+    --color-success-rgb: var(--color-teal-300-rgb);
+    --color-error-rgb: var(--color-red-400-rgb);
+    --color-warning-rgb: var(--color-orange-400-rgb);
+    --color-info-rgb: var(--color-gray-300-rgb);
+  }
+}
+
+@font-face {
+  font-family: 'FKGroteskNeue';
+  src: url('https://r2cdn.perplexity.ai/fonts/FKGroteskNeue.woff2') format('woff2');
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-family-base);
+    background: #000000;
+    overflow: hidden;
+    color: var(--color-text);
+}
+
+#canvas-container {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+#toolbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: rgba(31, 33, 33, 0.95);
+    backdrop-filter: blur(10px);
+    padding: var(--space-16) var(--space-24);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 100;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+#toolbar h1 {
+    color: #ffffff;
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-semibold);
+    margin: 0;
+}
+
+.filter-controls {
+    display: flex;
+    gap: var(--space-8);
+    align-items: center;
+}
+
+.filter-btn {
+    padding: var(--space-8) var(--space-16);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    border-radius: var(--radius-base);
+    cursor: pointer;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    transition: all var(--duration-fast) var(--ease-standard);
+    display: flex;
+    align-items: center;
+    gap: var(--space-6);
+}
+
+.filter-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.filter-btn.active {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: var(--color-btn-primary-text);
+}
+
+.filter-btn .color-indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.auto-rotate-btn {
+    padding: var(--space-8) var(--space-16);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    border-radius: var(--radius-base);
+    cursor: pointer;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    transition: all var(--duration-fast) var(--ease-standard);
+}
+
+.auto-rotate-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.auto-rotate-btn.active {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+}
+
+#info-panel {
+    position: fixed;
+    top: 80px;
+    right: -400px;
+    width: 380px;
+    max-height: calc(100vh - 100px);
+    background: rgba(31, 33, 33, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: var(--radius-lg);
+    padding: var(--space-24);
+    z-index: 100;
+    transition: right 0.3s var(--ease-standard);
+    overflow-y: auto;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+#info-panel.visible {
+    right: var(--space-24);
+}
+
+#info-panel h2 {
+    color: #ffffff;
+    font-size: var(--font-size-2xl);
+    margin-bottom: var(--space-16);
+    font-weight: var(--font-weight-semibold);
+}
+
+#info-panel .close-btn {
+    position: absolute;
+    top: var(--space-16);
+    right: var(--space-16);
+    background: transparent;
+    border: none;
+    color: #ffffff;
+    font-size: 24px;
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-base);
+    transition: background var(--duration-fast) var(--ease-standard);
+}
+
+#info-panel .close-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.treaty-detail {
+    margin-bottom: var(--space-16);
+}
+
+.treaty-detail label {
+    display: block;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: var(--font-size-sm);
+    margin-bottom: var(--space-4);
+    font-weight: var(--font-weight-medium);
+}
+
+.treaty-detail .value {
+    color: #ffffff;
+    font-size: var(--font-size-base);
+}
+
+.treaty-type-badge {
+    display: inline-block;
+    padding: var(--space-6) var(--space-12);
+    border-radius: var(--radius-full);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    margin-top: var(--space-4);
+}
+
+.country-pair {
+    display: flex;
+    align-items: center;
+    gap: var(--space-12);
+    margin: var(--space-16) 0;
+    font-size: var(--font-size-lg);
+    color: #ffffff;
+}
+
+.country-pair .arrow {
+    color: var(--color-primary);
+}
+
+#loading {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #ffffff;
+    font-size: var(--font-size-lg);
+    z-index: 200;
+    text-align: center;
+}
+
+.spinner {
+    border: 3px solid rgba(255, 255, 255, 0.1);
+    border-top: 3px solid var(--color-primary);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto var(--space-16);
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.legend {
+    position: fixed;
+    bottom: var(--space-24);
+    left: var(--space-24);
+    background: rgba(31, 33, 33, 0.95);
+    backdrop-filter: blur(10px);
+    padding: var(--space-16);
+    border-radius: var(--radius-lg);
+    z-index: 100;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.legend h3 {
+    color: #ffffff;
+    font-size: var(--font-size-base);
+    margin-bottom: var(--space-12);
+    font-weight: var(--font-weight-semibold);
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-8);
+    margin-bottom: var(--space-8);
+    color: rgba(255, 255, 255, 0.8);
+    font-size: var(--font-size-sm);
+}
+
+.legend-item:last-child {
+    margin-bottom: 0;
+}
+
+.legend-color {
+    width: 24px;
+    height: 3px;
+    border-radius: 2px;
+}
+
+@media (max-width: 768px) {
+    #toolbar {
+        flex-direction: column;
+        gap: var(--space-12);
+        padding: var(--space-12);
+    }
+    
+    #toolbar h1 {
+        font-size: var(--font-size-base);
+    }
+    
+    .filter-controls {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    #info-panel {
+        width: calc(100vw - 32px);
+        right: -100vw;
+    }
+    
+    #info-panel.visible {
+        right: var(--space-16);
+    }
+    
+    .legend {
+        bottom: var(--space-12);
+        left: var(--space-12);
+        padding: var(--space-12);
+    }
+}
+    </style>
+</head>
+<body>
+    <div id="loading">
+        <div class="spinner"></div>
+        <div>Cargando globo...</div>
+    </div>
+    
+    <div id="toolbar">
+        <h1>Tratados Comerciales del Perú</h1>
+        <div class="filter-controls">
+            <button class="filter-btn active" data-type="all">
+                Todos
+            </button>
+            <button class="filter-btn" data-type="FTA">
+                <span class="color-indicator" style="background: #2196F3;"></span>
+                TLC
+            </button>
+            <button class="filter-btn" data-type="Regional">
+                <span class="color-indicator" style="background: #4CAF50;"></span>
+                Regional
+            </button>
+            <button class="filter-btn" data-type="Bilateral">
+                <span class="color-indicator" style="background: #FF9800;"></span>
+                Bilateral
+            </button>
+            <button class="auto-rotate-btn active" id="autoRotateBtn">
+                ⟳ Auto-rotar
+            </button>
+        </div>
+    </div>
+    
+    <div id="canvas-container"></div>
+    
+    <div id="info-panel">
+        <button class="close-btn" id="closePanel">×</button>
+        <div id="panel-content"></div>
+    </div>
+    
+    <div class="legend">
+        <h3>Leyenda</h3>
+        <div class="legend-item">
+            <div class="legend-color" style="background: #2196F3;"></div>
+            <span>Tratado de Libre Comercio (TLC)</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background: #4CAF50;"></div>
+            <span>Acuerdo Regional</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background: #FF9800;"></div>
+            <span>Acuerdo Bilateral</span>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three/examples/js/controls/OrbitControls.js"></script>
+    
+    <script>
+        // Trade treaty data
+        const tradeTreaties = [
+            {
+                id: 1,
+                country1: "Perú",
+                country2: "Chile",
+                lat1: -9,
+                lng1: -76,
+                lat2: -30,
+                lng2: -71,
+                treaty_name: "Acuerdo de Complementación Económica",
+                treaty_type: "Regional",
+                year: 1995,
+                description: "Acuerdo de libre comercio dentro de la Comunidad Andina",
+                color: "#4CAF50"
+            },
+            {
+                id: 2,
+                country1: "Perú",
+                country2: "Colombia",
+                lat1: -9,
+                lng1: -76,
+                lat2: 4,
+                lng2: -74,
+                treaty_name: "Acuerdo Comercial CAN",
+                treaty_type: "Regional",
+                year: 1988,
+                description: "Comunidad Andina de Naciones - integración económica",
+                color: "#4CAF50"
+            },
+            {
+                id: 3,
+                country1: "Perú",
+                country2: "Estados Unidos",
+                lat1: -9,
+                lng1: -76,
+                lat2: 37,
+                lng2: -95,
+                treaty_name: "Tratado de Libre Comercio Perú-EE.UU.",
+                treaty_type: "FTA",
+                year: 2009,
+                description: "Tratado bilateral de libre comercio vigente desde 2009",
+                color: "#2196F3"
+            },
+            {
+                id: 4,
+                country1: "Perú",
+                country2: "China",
+                lat1: -9,
+                lng1: -76,
+                lat2: 35,
+                lng2: 105,
+                treaty_name: "Acuerdo Comercial Perú-China",
+                treaty_type: "Bilateral",
+                year: 2009,
+                description: "Acuerdo comercial bilateral para facilitar intercambio de bienes y servicios",
+                color: "#FF9800"
+            },
+            {
+                id: 5,
+                country1: "Perú",
+                country2: "Japón",
+                lat1: -9,
+                lng1: -76,
+                lat2: 36,
+                lng2: 138,
+                treaty_name: "Acuerdo Comercial Perú-Japón",
+                treaty_type: "Bilateral",
+                year: 2012,
+                description: "Acuerdo bilateral para acceso a mercado japonés",
+                color: "#FF9800"
+            },
+            {
+                id: 6,
+                country1: "Perú",
+                country2: "Corea del Sur",
+                lat1: -9,
+                lng1: -76,
+                lat2: 37,
+                lng2: 127,
+                treaty_name: "Tratado de Libre Comercio Perú-Corea",
+                treaty_type: "FTA",
+                year: 2014,
+                description: "Tratado de libre comercio para eliminar aranceles",
+                color: "#2196F3"
+            },
+            {
+                id: 7,
+                country1: "Perú",
+                country2: "Tailandia",
+                lat1: -9,
+                lng1: -76,
+                lat2: 15,
+                lng2: 100,
+                treaty_name: "Acuerdo Comercial Perú-Tailandia",
+                treaty_type: "Bilateral",
+                year: 2013,
+                description: "Acuerdo bilateral de cooperación comercial",
+                color: "#FF9800"
+            },
+            {
+                id: 8,
+                country1: "Perú",
+                country2: "Vietnam",
+                lat1: -9,
+                lng1: -76,
+                lat2: 16,
+                lng2: 106,
+                treaty_name: "Acuerdo Comercial Perú-Vietnam",
+                treaty_type: "Bilateral",
+                year: 2011,
+                description: "Acuerdo bilateral para relaciones comerciales",
+                color: "#FF9800"
+            },
+            {
+                id: 9,
+                country1: "Perú",
+                country2: "México",
+                lat1: -9,
+                lng1: -76,
+                lat2: 19,
+                lng2: -102,
+                treaty_name: "Tratado de Libre Comercio Perú-México",
+                treaty_type: "FTA",
+                year: 2011,
+                description: "Tratado entre países latinoamericanos para comercio",
+                color: "#2196F3"
+            },
+            {
+                id: 10,
+                country1: "Perú",
+                country2: "Ecuador",
+                lat1: -9,
+                lng1: -76,
+                lat2: -1,
+                lng2: -78,
+                treaty_name: "Pacto Andino",
+                treaty_type: "Regional",
+                year: 1969,
+                description: "Acuerdo regional de integración andina",
+                color: "#4CAF50"
+            }
+        ];
+
+        // Three.js setup
+        let scene, camera, renderer, globe, controls;
+        let arcs = [];
+        let raycaster, mouse;
+        let hoveredArc = null;
+        let selectedArc = null;
+        let autoRotate = true;
+        let activeFilters = new Set(['all']);
+
+        function init() {
+            // Scene
+            scene = new THREE.Scene();
+
+            // Camera
+            camera = new THREE.PerspectiveCamera(
+                45,
+                window.innerWidth / window.innerHeight,
+                0.1,
+                1000
+            );
+            camera.position.z = 250;
+
+            // Renderer
+            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            document.getElementById('canvas-container').appendChild(renderer.domElement);
+
+            // Controls
+            controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+            controls.minDistance = 120;
+            controls.maxDistance = 400;
+            controls.autoRotate = true;
+            controls.autoRotateSpeed = 0.5;
+
+            // Raycaster for mouse interaction
+            raycaster = new THREE.Raycaster();
+            raycaster.params.Line.threshold = 3;
+            mouse = new THREE.Vector2();
+
+            // Lighting
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+            scene.add(ambientLight);
+
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            directionalLight.position.set(5, 3, 5);
+            scene.add(directionalLight);
+
+            // Create globe
+            createGlobe();
+
+            // Create arcs
+            createArcs();
+
+            // Event listeners
+            window.addEventListener('resize', onWindowResize);
+            window.addEventListener('mousemove', onMouseMove);
+            window.addEventListener('click', onMouseClick);
+            document.getElementById('closePanel').addEventListener('click', closePanel);
+            document.getElementById('autoRotateBtn').addEventListener('click', toggleAutoRotate);
+
+            // Filter buttons
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', () => handleFilterClick(btn));
+            });
+
+            // Hide loading
+            document.getElementById('loading').style.display = 'none';
+
+            // Start animation
+            animate();
+        }
+
+        function createGlobe() {
+            const geometry = new THREE.SphereGeometry(50, 64, 64);
+            
+            // Create a simple textured material
+            const loader = new THREE.TextureLoader();
+            const texture = loader.load(
+                'https://unpkg.com/three-globe@2.24.10/example/img/earth-blue-marble.jpg',
+                () => {
+                    renderer.render(scene, camera);
+                }
+            );
+            
+            const material = new THREE.MeshPhongMaterial({
+                map: texture,
+                bumpScale: 0.05,
+                specular: new THREE.Color(0x333333),
+                shininess: 15
+            });
+
+            globe = new THREE.Mesh(geometry, material);
+            scene.add(globe);
+        }
+
+        function latLngToVector3(lat, lng, radius) {
+            const phi = (90 - lat) * (Math.PI / 180);
+            const theta = (lng + 180) * (Math.PI / 180);
+
+            const x = -(radius * Math.sin(phi) * Math.cos(theta));
+            const y = radius * Math.cos(phi);
+            const z = radius * Math.sin(phi) * Math.sin(theta);
+
+            return new THREE.Vector3(x, y, z);
+        }
+
+        function createArc(treaty) {
+            const start = latLngToVector3(treaty.lat1, treaty.lng1, 50);
+            const end = latLngToVector3(treaty.lat2, treaty.lng2, 50);
+
+            // Calculate control point for curve (higher arc)
+            const distance = start.distanceTo(end);
+            const mid = new THREE.Vector3().addVectors(start, end).multiplyScalar(0.5);
+            const height = distance * 0.35;
+            mid.normalize().multiplyScalar(50 + height);
+
+            // Create quadratic bezier curve
+            const curve = new THREE.QuadraticBezierCurve3(start, mid, end);
+            const points = curve.getPoints(50);
+            const geometry = new THREE.BufferGeometry().setFromPoints(points);
+
+            // Create material with treaty color
+            const material = new THREE.LineBasicMaterial({
+                color: new THREE.Color(treaty.color),
+                linewidth: 2,
+                transparent: true,
+                opacity: 0.6
+            });
+
+            const arc = new THREE.Line(geometry, material);
+            arc.userData = { treaty, originalOpacity: 0.6, originalColor: treaty.color };
+            scene.add(arc);
+            arcs.push(arc);
+
+            return arc;
+        }
+
+        function createArcs() {
+            tradeTreaties.forEach(treaty => {
+                createArc(treaty);
+            });
+        }
+
+        function onMouseMove(event) {
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+            raycaster.setFromCamera(mouse, camera);
+            const visibleArcs = arcs.filter(arc => arc.visible);
+            const intersects = raycaster.intersectObjects(visibleArcs);
+
+            // Reset previous hover
+            if (hoveredArc && hoveredArc !== selectedArc) {
+                hoveredArc.material.opacity = hoveredArc.userData.originalOpacity;
+                hoveredArc.material.color.setHex(parseInt(hoveredArc.userData.originalColor.replace('#', '0x')));
+            }
+
+            if (intersects.length > 0) {
+                hoveredArc = intersects[0].object;
+                if (hoveredArc !== selectedArc) {
+                    hoveredArc.material.opacity = 1.0;
+                    hoveredArc.material.color.setHex(0xFFFFFF);
+                }
+                renderer.domElement.style.cursor = 'pointer';
+            } else {
+                hoveredArc = null;
+                renderer.domElement.style.cursor = 'default';
+            }
+        }
+
+        function onMouseClick(event) {
+            if (event.target.closest('#info-panel') || event.target.closest('#toolbar')) {
+                return;
+            }
+
+            raycaster.setFromCamera(mouse, camera);
+            const visibleArcs = arcs.filter(arc => arc.visible);
+            const intersects = raycaster.intersectObjects(visibleArcs);
+
+            if (intersects.length > 0) {
+                const clickedArc = intersects[0].object;
+                selectArc(clickedArc);
+            } else {
+                closePanel();
+            }
+        }
+
+        function selectArc(arc) {
+            // Reset previous selection
+            if (selectedArc) {
+                selectedArc.material.opacity = selectedArc.userData.originalOpacity;
+                selectedArc.material.color.setHex(parseInt(selectedArc.userData.originalColor.replace('#', '0x')));
+            }
+
+            selectedArc = arc;
+            selectedArc.material.opacity = 1.0;
+            selectedArc.material.color.setHex(0xFFFFFF);
+
+            showTreatyInfo(arc.userData.treaty);
+        }
+
+        function showTreatyInfo(treaty) {
+            const panel = document.getElementById('info-panel');
+            const content = document.getElementById('panel-content');
+
+            const typeColors = {
+                'FTA': '#2196F3',
+                'Regional': '#4CAF50',
+                'Bilateral': '#FF9800',
+                'Multilateral': '#9C27B0'
+            };
+
+            const typeLabels = {
+                'FTA': 'Tratado de Libre Comercio',
+                'Regional': 'Acuerdo Regional',
+                'Bilateral': 'Acuerdo Bilateral',
+                'Multilateral': 'Acuerdo Multilateral'
+            };
+
+            content.innerHTML = `
+                <h2>${treaty.treaty_name}</h2>
+                <div class="country-pair">
+                    <span>${treaty.country1}</span>
+                    <span class="arrow">↔</span>
+                    <span>${treaty.country2}</span>
+                </div>
+                <div class="treaty-detail">
+                    <label>Tipo de Tratado</label>
+                    <div class="treaty-type-badge" style="background: ${typeColors[treaty.treaty_type]}33; color: ${typeColors[treaty.treaty_type]}; border: 1px solid ${typeColors[treaty.treaty_type]}55;">
+                        ${typeLabels[treaty.treaty_type]}
+                    </div>
+                </div>
+                <div class="treaty-detail">
+                    <label>Año de Firma</label>
+                    <div class="value">${treaty.year}</div>
+                </div>
+                <div class="treaty-detail">
+                    <label>Descripción</label>
+                    <div class="value">${treaty.description}</div>
+                </div>
+            `;
+
+            panel.classList.add('visible');
+        }
+
+        function closePanel() {
+            const panel = document.getElementById('info-panel');
+            panel.classList.remove('visible');
+
+            if (selectedArc) {
+                selectedArc.material.opacity = selectedArc.userData.originalOpacity;
+                selectedArc.material.color.setHex(parseInt(selectedArc.userData.originalColor.replace('#', '0x')));
+                selectedArc = null;
+            }
+        }
+
+        function toggleAutoRotate() {
+            autoRotate = !autoRotate;
+            controls.autoRotate = autoRotate;
+            const btn = document.getElementById('autoRotateBtn');
+            btn.classList.toggle('active', autoRotate);
+        }
+
+        function handleFilterClick(button) {
+            const filterType = button.dataset.type;
+
+            if (filterType === 'all') {
+                // Show all
+                activeFilters.clear();
+                activeFilters.add('all');
+                document.querySelectorAll('.filter-btn').forEach(btn => {
+                    btn.classList.toggle('active', btn.dataset.type === 'all');
+                });
+                arcs.forEach(arc => arc.visible = true);
+            } else {
+                // Remove 'all' if present
+                activeFilters.delete('all');
+                document.querySelector('.filter-btn[data-type="all"]').classList.remove('active');
+
+                // Toggle this filter
+                if (activeFilters.has(filterType)) {
+                    activeFilters.delete(filterType);
+                    button.classList.remove('active');
+                } else {
+                    activeFilters.add(filterType);
+                    button.classList.add('active');
+                }
+
+                // If no filters active, show all
+                if (activeFilters.size === 0) {
+                    activeFilters.add('all');
+                    document.querySelector('.filter-btn[data-type="all"]').classList.add('active');
+                    arcs.forEach(arc => arc.visible = true);
+                } else {
+                    // Filter arcs
+                    arcs.forEach(arc => {
+                        arc.visible = activeFilters.has(arc.userData.treaty.treaty_type);
+                    });
+                }
+            }
+
+            // Close panel if selected arc is now hidden
+            if (selectedArc && !selectedArc.visible) {
+                closePanel();
+            }
+        }
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            controls.update();
+            renderer.render(scene, camera);
+        }
+
+        // Initialize when DOM is loaded
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+    </script>
+</body>
+</html>
