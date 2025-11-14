@@ -5,122 +5,333 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Panel Diplomático Global</title>
   <style>
+    * {
+      box-sizing: border-box;
+    }
     body, html {
       margin: 0;
       padding: 0;
-      overflow: hidden;
       background: #001a33;
       font-family: "Segoe UI", sans-serif;
       color: white;
+      height: 100vh;
     }
-    #globe-container {
-      width: 100%;
-      height: 70vh;
+
+    /* Layout principal: izquierda panel, derecha globo */
+    #app {
       display: flex;
-      justify-content: center;
-      align-items: center;
-      position: relative;
+      height: 100vh;
+      overflow: hidden;
     }
-    #globe {
-      width: 70vmin;
-      height: 70vmin;
-    }
-    .btn-bar {
-      position: absolute;
-      top: 10px;
-      left: 50%;
-      transform: translateX(-50%);
+
+    /* PANEL IZQUIERDO */
+    #sidebar {
+      width: 38%;
+      min-width: 320px;
+      max-width: 520px;
+      padding: 16px 18px;
+      border-right: 1px solid #003d66;
+      background: radial-gradient(circle at top left, #022b4d, #001020 65%);
       display: flex;
-      gap: 15px;
-      z-index: 10;
-    }
-    button {
-      background: #00ffff;
-      color: #001a33;
-      border: none;
-      padding: 10px 18px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: bold;
-      transition: 0.2s;
-    }
-    button:hover {
-      background: white;
-      color: #001a33;
-    }
-    #resumen {
-      width: 100%;
-      background: rgba(255,255,255,0.05);
-      padding: 20px;
-      height: 30vh;
+      flex-direction: column;
+      gap: 14px;
       overflow-y: auto;
-      box-shadow: 0 -2px 10px rgba(0,0,0,0.3);
+    }
+
+    #sidebar h1 {
+      font-size: 1.3rem;
+      margin: 0 0 4px;
+    }
+    #sidebar h2 {
+      font-size: 1rem;
+      margin: 0 0 8px;
+      opacity: 0.9;
+    }
+
+    .panel {
+      background: rgba(0, 10, 30, 0.9);
+      border-radius: 10px;
+      padding: 10px 12px;
+      box-shadow: 0 0 16px rgba(0,0,0,0.5);
+      border: 1px solid rgba(0,255,255,0.15);
+    }
+
+    #country-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    #country-flag {
+      width: 46px;
+      height: 30px;
+      object-fit: cover;
+      border-radius: 4px;
+      border: 1px solid rgba(255,255,255,0.6);
+    }
+    #country-name {
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+    #country-continent {
+      font-size: 0.8rem;
+      opacity: 0.8;
+    }
+
+    .stat-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 8px;
+      font-size: 0.85rem;
+    }
+    .stat-pill {
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(0, 255, 255, 0.08);
+      border: 1px solid rgba(0, 255, 255, 0.25);
+      white-space: nowrap;
+    }
+
+    /* Barra de cumplimiento */
+    #cumplimiento-wrapper {
+      margin-top: 8px;
+    }
+    #cumplimiento-label {
+      font-size: 0.85rem;
+      margin-bottom: 4px;
+    }
+    #cumplimiento-bar {
+      width: 100%;
+      height: 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.08);
+      overflow: hidden;
+    }
+    #cumplimiento-fill {
+      height: 100%;
+      width: 0;
+      border-radius: 999px;
+      transition: width 0.5s ease;
+      background: linear-gradient(90deg, #ff4b5c, #ffeb3b, #00e676);
+    }
+
+    #razon-color {
+      margin-top: 8px;
+      font-size: 0.85rem;
+      line-height: 1.3;
+      opacity: 0.9;
+    }
+
+    #datos-socio {
+      margin-top: 6px;
+      font-size: 0.83rem;
+      line-height: 1.35;
+      opacity: 0.95;
+    }
+
+    /* FILTROS Y TABLA */
+    #filtros {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 6px;
+      font-size: 0.85rem;
+    }
+    #filtros label {
+      margin-right: 2px;
     }
     select {
       background: #003366;
       color: white;
       border: 1px solid #00ffff;
       border-radius: 6px;
-      padding: 6px 10px;
-      margin-right: 10px;
+      padding: 4px 8px;
+      font-size: 0.82rem;
+      outline: none;
     }
-    .tabla {
-      margin-top: 15px;
-      border-collapse: collapse;
+
+    table {
       width: 100%;
-      color: white;
+      border-collapse: collapse;
+      font-size: 0.8rem;
+      margin-top: 4px;
+    }
+    th, td {
+      border-bottom: 1px solid #00ffff33;
+      padding: 6px 4px;
       text-align: left;
     }
-    .tabla th, .tabla td {
-      border-bottom: 1px solid #00ffff33;
-      padding: 8px;
+    th {
+      font-weight: 600;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      opacity: 0.85;
+    }
+    tr:hover {
+      background: rgba(0, 255, 255, 0.08);
+      cursor: pointer;
+    }
+
+    /* CONTENEDOR GLOBO DERECHA */
+    #globe-container {
+      flex: 1;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: radial-gradient(circle at center, #02152b, #00050b 60%);
+    }
+    #globe {
+      width: min(70vmin, 100%);
+      height: min(70vmin, 100%);
+    }
+
+    .btn-bar {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      display: flex;
+      gap: 10px;
+      z-index: 10;
+    }
+    button {
+      background: #00ffff;
+      color: #001a33;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.85rem;
+      transition: 0.2s;
+      box-shadow: 0 0 8px rgba(0,0,0,0.6);
+      white-space: nowrap;
+    }
+    button:hover {
+      background: white;
+      color: #001a33;
+      transform: translateY(-1px);
+    }
+
+    #hint {
+      position: absolute;
+      bottom: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.8rem;
+      opacity: 0.7;
+    }
+
+    @media (max-width: 900px) {
+      #app {
+        flex-direction: column;
+      }
+      #sidebar {
+        width: 100%;
+        max-width: none;
+        height: 55vh;
+      }
+      #globe-container {
+        height: 45vh;
+      }
+      #globe {
+        width: 80vmin;
+        height: 80vmin;
+      }
+      .btn-bar {
+        top: 8px;
+        left: 50%;
+        transform: translateX(-50%);
+      }
     }
   </style>
 </head>
 <body>
-  <div id="globe-container">
-    <div class="btn-bar">
-      <button id="uploadBtn">📤 Subir documento</button>
-      <button id="cumplimientoBtn">📊 Cumplimiento</button>
+  <div id="app">
+    <!-- PANEL IZQUIERDO -->
+    <div id="sidebar">
+      <div>
+        <h1>Panel Diplomático Global</h1>
+        <h2>Embajadas, objetivos y contexto país</h2>
+      </div>
+
+      <!-- PAÍS SELECCIONADO -->
+      <div class="panel" id="country-panel">
+        <div id="country-header">
+          <img id="country-flag" src="" alt="Bandera">
+          <div>
+            <div id="country-name">Seleccione un país</div>
+            <div id="country-continent"></div>
+          </div>
+        </div>
+
+        <div class="stat-row" id="stats-pills">
+          <!-- pills dinámicos -->
+        </div>
+
+        <div id="cumplimiento-wrapper">
+          <div id="cumplimiento-label">Cumplimiento de objetivos de la embajada: <span id="cumplimiento-text">-</span></div>
+          <div id="cumplimiento-bar">
+            <div id="cumplimiento-fill"></div>
+          </div>
+        </div>
+
+        <div id="razon-color"></div>
+        <div id="datos-socio"></div>
+      </div>
+
+      <!-- TABLA DE CONSOLIDADO -->
+      <div class="panel">
+        <h2>Consolidado por país</h2>
+
+        <div id="filtros">
+          <div>
+            <label for="selectContinente">Continente:</label>
+            <select id="selectContinente">
+              <option value="todos">Todos</option>
+              <option value="América">América</option>
+              <option value="Europa">Europa</option>
+              <option value="Asia">Asia</option>
+              <option value="África">África</option>
+              <option value="Oceanía">Oceanía</option>
+            </select>
+          </div>
+          <div>
+            <label for="selectRiesgo">Nivel:</label>
+            <select id="selectRiesgo">
+              <option value="todos">Todos</option>
+              <option value="Alto">Alto</option>
+              <option value="Medio">Medio</option>
+              <option value="Bajo">Bajo</option>
+            </select>
+          </div>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>País</th>
+              <th>Cont.</th>
+              <th>Obj.</th>
+              <th>Cumpl.</th>
+              <th>Nivel</th>
+            </tr>
+          </thead>
+          <tbody id="tablaResumen"></tbody>
+        </table>
+      </div>
     </div>
-    <div id="globe"></div>
-  </div>
 
-  <div id="resumen">
-    <h3>Resumen de cumplimiento de objetivos</h3>
-    <div>
-      <label>Filtrar por continente:</label>
-      <select id="selectContinente">
-        <option value="todos">Todos</option>
-        <option value="América">América</option>
-        <option value="Europa">Europa</option>
-        <option value="Asia">Asia</option>
-        <option value="África">África</option>
-        <option value="Oceanía">Oceanía</option>
-      </select>
-
-      <label>Filtrar por país:</label>
-      <select id="selectPais">
-        <option value="todos">Todos</option>
-        <option value="Perú">Perú</option>
-        <option value="España">España</option>
-        <option value="Japón">Japón</option>
-        <option value="EE.UU.">EE.UU.</option>
-        <option value="Sudáfrica">Sudáfrica</option>
-      </select>
+    <!-- GLOBO DERECHA -->
+    <div id="globe-container">
+      <div class="btn-bar">
+        <button id="uploadBtn">📤 Subir documento</button>
+        <button id="cumplimientoBtn">📊 Ir a consolidado</button>
+      </div>
+      <div id="globe"></div>
+      <div id="hint">Arrastra para rotar, haz clic en un pin o sobre el planeta para ver el país</div>
     </div>
-
-    <table class="tabla" id="tablaResumen">
-      <thead>
-        <tr>
-          <th>País</th>
-          <th>Continente</th>
-          <th>Objetivos</th>
-          <th>Cumplimiento</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
   </div>
 
   <!-- Import Map -->
@@ -137,79 +348,418 @@
     import * as THREE from "three";
     import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
+    /* =========================
+       DATOS DE PAÍSES / EMBAJADAS
+       ========================= */
+
+    // Nota: datos reales aproximados, puedes ajustar / ampliar.
+    const countriesData = [
+      {
+        nombre: "Perú",
+        codigoBandera: "pe",
+        continente: "América",
+        lat: -12.0464,
+        lon: -77.0428,
+        objetivos: 12,
+        cumplimiento: 0.85,
+        nivel: "Medio",
+        socio: {
+          poblacion: "34 M hab.",
+          pibPerCapita: "≈ US$ 7 000",
+          hdi: "IDH: 0.777",
+          sistema: "República democrática presidencial",
+          comentarioColor:
+            "El tono verde medio refleja avances en diversificación económica y reducción de pobreza, pero persisten retos en informalidad laboral y brechas regionales."
+        }
+      },
+      {
+        nombre: "España",
+        codigoBandera: "es",
+        continente: "Europa",
+        lat: 40.4168,
+        lon: -3.7038,
+        objetivos: 10,
+        cumplimiento: 0.9,
+        nivel: "Bajo",
+        socio: {
+          poblacion: "48 M hab.",
+          pibPerCapita: "≈ US$ 30 000",
+          hdi: "IDH: 0.905",
+          sistema: "Monarquía parlamentaria",
+          comentarioColor:
+            "Color verde alto por buen desempeño en estado de derecho, políticas de cooperación y estabilidad institucional, con foco en transición energética y digital."
+        }
+      },
+      {
+        nombre: "Japón",
+        codigoBandera: "jp",
+        continente: "Asia",
+        lat: 35.6895,
+        lon: 139.6917,
+        objetivos: 15,
+        cumplimiento: 0.7,
+        nivel: "Medio",
+        socio: {
+          poblacion: "125 M hab.",
+          pibPerCapita: "≈ US$ 40 000",
+          hdi: "IDH: 0.925",
+          sistema: "Monarquía constitucional parlamentaria",
+          comentarioColor:
+            "Amarillo por cumplimiento intermedio: alto desarrollo tecnológico y estabilidad, pero desafíos en envejecimiento poblacional y dinamismo económico."
+        }
+      },
+      {
+        nombre: "Estados Unidos",
+        codigoBandera: "us",
+        continente: "América",
+        lat: 38.9072,
+        lon: -77.0369,
+        objetivos: 8,
+        cumplimiento: 0.95,
+        nivel: "Bajo",
+        socio: {
+          poblacion: "334 M hab.",
+          pibPerCapita: "≈ US$ 80 000",
+          hdi: "IDH: 0.921",
+          sistema: "República federal presidencial",
+          comentarioColor:
+            "Verde intenso por alto nivel de ejecución de objetivos, con fuerte presencia económica y de seguridad; sin embargo se monitorean tensiones políticas internas."
+        }
+      },
+      {
+        nombre: "Sudáfrica",
+        codigoBandera: "za",
+        continente: "África",
+        lat: -25.7479,
+        lon: 28.2293,
+        objetivos: 9,
+        cumplimiento: 0.8,
+        nivel: "Alto",
+        socio: {
+          poblacion: "61 M hab.",
+          pibPerCapita: "≈ US$ 6 000",
+          hdi: "IDH: 0.713",
+          sistema: "República parlamentaria",
+          comentarioColor:
+            "Verde-amarillo por un avance significativo en cooperación regional y agenda social, pero con alto riesgo por desigualdad, desempleo y seguridad ciudadana."
+        }
+      },
+      {
+        nombre: "Alemania",
+        codigoBandera: "de",
+        continente: "Europa",
+        lat: 52.5200,
+        lon: 13.4050,
+        objetivos: 11,
+        cumplimiento: 0.88,
+        nivel: "Bajo",
+        socio: {
+          poblacion: "84 M hab.",
+          pibPerCapita: "≈ US$ 51 000",
+          hdi: "IDH: 0.942",
+          sistema: "República federal parlamentaria",
+          comentarioColor:
+            "Verde por alto cumplimiento orientado a transición energética, cooperación científica e integración europea; algunos riesgos por ralentización económica."
+        }
+      },
+      {
+        nombre: "Brasil",
+        codigoBandera: "br",
+        continente: "América",
+        lat: -15.7939,
+        lon: -47.8828,
+        objetivos: 13,
+        cumplimiento: 0.65,
+        nivel: "Alto",
+        socio: {
+          poblacion: "214 M hab.",
+          pibPerCapita: "≈ US$ 9 000",
+          hdi: "IDH: 0.754",
+          sistema: "República federal presidencial",
+          comentarioColor:
+            "Amarillo-rojizo por avances parciales en agenda climática y social, con riesgos asociados a polarización política y deforestación amazónica."
+        }
+      }
+    ];
+
+    /* =========================
+       FUNCIONES DE APOYO
+       ========================= */
+
+    function cumplimientoToColor(c) {
+      if (c < 0.6) return "#ff4b5c";      // rojo
+      if (c < 0.85) return "#ffeb3b";     // amarillo
+      return "#00e676";                  // verde
+    }
+
+    function latLonToVector3(lat, lon, radius = 1.01) {
+      const latRad = THREE.MathUtils.degToRad(lat);
+      const lonRad = THREE.MathUtils.degToRad(lon);
+      const x = radius * Math.cos(latRad) * Math.cos(lonRad);
+      const y = radius * Math.sin(latRad);
+      const z = radius * Math.cos(latRad) * Math.sin(lonRad);
+      return new THREE.Vector3(x, y, z);
+    }
+
+    function vector3ToLatLon(vec) {
+      const v = vec.clone().normalize();
+      const lat = THREE.MathUtils.radToDeg(Math.asin(v.y));
+      const lon = THREE.MathUtils.radToDeg(Math.atan2(v.z, v.x));
+      return { lat, lon };
+    }
+
+    function findNearestCountry(lat, lon) {
+      let best = null;
+      let bestDist = Infinity;
+      for (const c of countriesData) {
+        const dLat = lat - c.lat;
+        const dLon = lon - c.lon;
+        const dist = dLat * dLat + dLon * dLon;
+        if (dist < bestDist) {
+          bestDist = dist;
+          best = c;
+        }
+      }
+      return best;
+    }
+
+    /* =========================
+       THREE.JS: ESCENA DEL GLOBO
+       ========================= */
+
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(60, 1, 0.1, 1000);
     camera.position.set(0, 0, 3);
 
     const renderer = new THREE.WebGLRenderer({ antialias: true });
-    const globe = document.getElementById("globe");
-    renderer.setSize(globe.clientWidth, globe.clientHeight);
-    globe.appendChild(renderer.domElement);
+    const globeDiv = document.getElementById("globe");
+    renderer.setSize(globeDiv.clientWidth, globeDiv.clientHeight);
+    globeDiv.appendChild(renderer.domElement);
 
-    // 💡 Iluminación
-    const dirLight = new THREE.DirectionalLight(0xffffff, 1.8);
+    const dirLight = new THREE.DirectionalLight(0xffffff, 1.4);
     dirLight.position.set(5, 3, 5);
     scene.add(dirLight);
-    const hemiLight = new THREE.HemisphereLight(0xaaaaee, 0x080820, 1.5);
+    const hemiLight = new THREE.HemisphereLight(0xaaaaee, 0x080820, 1.2);
     scene.add(hemiLight);
 
-    // 🌐 Textura del planeta
+    // Textura de la Tierra (solo día para evitar problemas CORS)
     const loader = new THREE.TextureLoader();
-    const earthTexture = loader.load("https://cdn.jsdelivr.net/gh/turban/webgl-earth@master/images/2_no_clouds_4k.jpg");
-    const earthNight = loader.load("https://eoimages.gsfc.nasa.gov/images/imagerecords/55000/55167/earth_lights_lrg.jpg");
+    const earthTexture = loader.load(
+      "https://cdn.jsdelivr.net/gh/turban/webgl-earth@master/images/2_no_clouds_4k.jpg"
+    );
 
-    const material = new THREE.MeshPhongMaterial({
-      map: earthTexture,
-      emissiveMap: earthNight,
-      emissive: new THREE.Color(0x222244),
-      emissiveIntensity: 0.5
+    const earthMaterial = new THREE.MeshPhongMaterial({
+      map: earthTexture
     });
 
-    const earth = new THREE.Mesh(new THREE.SphereGeometry(1, 64, 64), material);
+    const earth = new THREE.Mesh(
+      new THREE.SphereGeometry(1, 64, 64),
+      earthMaterial
+    );
     scene.add(earth);
 
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
+    controls.enablePan = false;
+    controls.minDistance = 1.8;
+    controls.maxDistance = 5;
+    controls.autoRotate = false;
 
-    // ⚙️ Datos ejemplo de cumplimiento
-    const datos = [
-      { pais: "Perú", continente: "América", objetivos: 12, cumplimiento: "85%" },
-      { pais: "España", continente: "Europa", objetivos: 10, cumplimiento: "90%" },
-      { pais: "Japón", continente: "Asia", objetivos: 15, cumplimiento: "70%" },
-      { pais: "EE.UU.", continente: "América", objetivos: 8, cumplimiento: "95%" },
-      { pais: "Sudáfrica", continente: "África", objetivos: 9, cumplimiento: "80%" }
-    ];
+    // Grupo de pines
+    const pinsGroup = new THREE.Group();
+    scene.add(pinsGroup);
 
-    const tbody = document.querySelector("#tablaResumen tbody");
-    function renderTabla(filtroC, filtroP) {
+    const pinMeshes = [];
+
+    for (const c of countriesData) {
+      const color = cumplimientoToColor(c.cumplimiento);
+      const pinGeom = new THREE.SphereGeometry(0.03, 16, 16);
+      const pinMat = new THREE.MeshBasicMaterial({ color });
+      const pin = new THREE.Mesh(pinGeom, pinMat);
+      const pos = latLonToVector3(c.lat, c.lon, 1.02);
+      pin.position.copy(pos);
+      pin.userData.country = c;
+      pinsGroup.add(pin);
+      pinMeshes.push(pin);
+
+      // Pequeña línea (poste)
+      const lineGeom = new THREE.CylinderGeometry(0.004, 0.004, 0.12, 8);
+      const lineMat = new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.75 });
+      const line = new THREE.Mesh(lineGeom, lineMat);
+      line.position.copy(pos.clone().multiplyScalar(0.96));
+      line.lookAt(new THREE.Vector3(0,0,0));
+      pinsGroup.add(line);
+    }
+
+    const raycaster = new THREE.Raycaster();
+    const pointer = new THREE.Vector2();
+    let selectedPin = null;
+
+    function onPointerDown(event) {
+      const rect = renderer.domElement.getBoundingClientRect();
+      const x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+      const y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+      pointer.set(x, y);
+
+      raycaster.setFromCamera(pointer, camera);
+
+      // 1) Revisar pines
+      const pinIntersects = raycaster.intersectObjects(pinMeshes, false);
+      if (pinIntersects.length > 0) {
+        const c = pinIntersects[0].object.userData.country;
+        focusCountry(c, pinIntersects[0].object);
+        return;
+      }
+
+      // 2) Revisar globo
+      const earthIntersects = raycaster.intersectObject(earth);
+      if (earthIntersects.length > 0) {
+        const point = earthIntersects[0].point;
+        const { lat, lon } = vector3ToLatLon(point);
+        const nearest = findNearestCountry(lat, lon);
+        if (nearest) {
+          // Buscar su pin
+          const pin = pinMeshes.find(p => p.userData.country.nombre === nearest.nombre);
+          focusCountry(nearest, pin || null);
+        }
+      }
+    }
+
+    renderer.domElement.addEventListener("pointerdown", onPointerDown);
+
+    function focusCountry(country, pinMesh) {
+      // resaltar pin
+      if (selectedPin) selectedPin.scale.set(1,1,1);
+      if (pinMesh) {
+        pinMesh.scale.set(1.6, 1.6, 1.6);
+        selectedPin = pinMesh;
+      }
+
+      // centrar vista aproximando la cámara
+      const targetPos = latLonToVector3(country.lat, country.lon, 1.0);
+      controls.target.copy(targetPos);
+      camera.position.copy(targetPos.clone().multiplyScalar(3));
+      camera.lookAt(targetPos);
+
+      updateSidebar(country);
+      highlightRow(country.nombre);
+    }
+
+    /* =========================
+       ACTUALIZAR PANEL IZQUIERDO
+       ========================= */
+
+    const flagImg = document.getElementById("country-flag");
+    const countryNameEl = document.getElementById("country-name");
+    const countryContEl = document.getElementById("country-continent");
+    const statsPillsEl = document.getElementById("stats-pills");
+    const cumplimientoFillEl = document.getElementById("cumplimiento-fill");
+    const cumplimientoTextEl = document.getElementById("cumplimiento-text");
+    const razonColorEl = document.getElementById("razon-color");
+    const datosSocioEl = document.getElementById("datos-socio");
+
+    function updateSidebar(country) {
+      const flagUrl = `https://flagcdn.com/w80/${country.codigoBandera}.png`;
+      flagImg.src = flagUrl;
+      flagImg.alt = `Bandera de ${country.nombre}`;
+      countryNameEl.textContent = country.nombre;
+      countryContEl.textContent = country.continente;
+
+      // pills
+      statsPillsEl.innerHTML = "";
+      const pillData = [
+        `Objetivos: ${country.objetivos}`,
+        `Cumplimiento: ${(country.cumplimiento * 100).toFixed(0)}%`,
+        `Nivel: ${country.nivel}`
+      ];
+      pillData.forEach(t => {
+        const span = document.createElement("span");
+        span.className = "stat-pill";
+        span.textContent = t;
+        statsPillsEl.appendChild(span);
+      });
+
+      const percentText = (country.cumplimiento * 100).toFixed(0) + "%";
+      cumplimientoTextEl.textContent = percentText;
+      cumplimientoFillEl.style.width = percentText;
+      cumplimientoFillEl.style.background = cumplimientoToColor(country.cumplimiento);
+
+      razonColorEl.textContent = country.socio.comentarioColor;
+
+      datosSocioEl.innerHTML = `
+        <strong>Datos socioeconómicos y políticos:</strong><br>
+        • Población: ${country.socio.poblacion}<br>
+        • PIB per cápita: ${country.socio.pibPerCapita}<br>
+        • ${country.socio.hdi}<br>
+        • Sistema político: ${country.socio.sistema}
+      `;
+    }
+
+    /* =========================
+       TABLA CONSOLIDADA
+       ========================= */
+
+    const tbody = document.getElementById("tablaResumen");
+    const selectContinente = document.getElementById("selectContinente");
+    const selectRiesgo = document.getElementById("selectRiesgo");
+
+    function renderTabla() {
       tbody.innerHTML = "";
-      datos
-        .filter(d => (filtroC === "todos" || d.continente === filtroC))
-        .filter(d => (filtroP === "todos" || d.pais === filtroP))
-        .forEach(d => {
+      const filtroC = selectContinente.value;
+      const filtroR = selectRiesgo.value;
+
+      countriesData
+        .filter(c => filtroC === "todos" || c.continente === filtroC)
+        .filter(c => filtroR === "todos" || c.nivel === filtroR)
+        .forEach(c => {
           const tr = document.createElement("tr");
-          tr.innerHTML = `<td>${d.pais}</td><td>${d.continente}</td><td>${d.objetivos}</td><td>${d.cumplimiento}</td>`;
+          tr.dataset.country = c.nombre;
+          const porcentaje = (c.cumplimiento * 100).toFixed(0) + "%";
+          tr.innerHTML = `
+            <td>${c.nombre}</td>
+            <td>${c.continente.substring(0,3)}</td>
+            <td>${c.objetivos}</td>
+            <td>${porcentaje}</td>
+            <td>${c.nivel}</td>
+          `;
+          tr.addEventListener("click", () => {
+            const pin = pinMeshes.find(p => p.userData.country.nombre === c.nombre);
+            focusCountry(c, pin || null);
+          });
           tbody.appendChild(tr);
         });
     }
-    renderTabla("todos", "todos");
 
-    document.getElementById("selectContinente").addEventListener("change", e => {
-      renderTabla(e.target.value, document.getElementById("selectPais").value);
-    });
-    document.getElementById("selectPais").addEventListener("change", e => {
-      renderTabla(document.getElementById("selectContinente").value, e.target.value);
-    });
+    function highlightRow(countryName) {
+      const rows = tbody.querySelectorAll("tr");
+      rows.forEach(r => {
+        if (r.dataset.country === countryName) {
+          r.style.backgroundColor = "rgba(0, 255, 255, 0.18)";
+        } else {
+          r.style.backgroundColor = "transparent";
+        }
+      });
+    }
 
-    // 📂 Botones
+    selectContinente.addEventListener("change", renderTabla);
+    selectRiesgo.addEventListener("change", renderTabla);
+
+    renderTabla();
+    // Seleccionar por defecto el primer país
+    focusCountry(countriesData[0], pinMeshes[0]);
+
+    /* =========================
+       BOTONES Y ANIMACIÓN
+       ========================= */
+
     document.getElementById("uploadBtn").addEventListener("click", () => {
-      alert("Aquí se conectará la función para subir documento.");
-    });
-    document.getElementById("cumplimientoBtn").addEventListener("click", () => {
-      document.getElementById("resumen").scrollIntoView({ behavior: "smooth" });
+      alert("Aquí se conectará la función para subir y procesar documentos de la embajada.");
     });
 
-    // 🔁 Animación
+    document.getElementById("cumplimientoBtn").addEventListener("click", () => {
+      document.getElementById("sidebar").scrollIntoView({ behavior: "smooth" });
+    });
+
     function animate() {
       requestAnimationFrame(animate);
       earth.rotation.y += 0.0008;
@@ -219,7 +769,7 @@
     animate();
 
     window.addEventListener("resize", () => {
-      const size = globe.getBoundingClientRect();
+      const size = globeDiv.getBoundingClientRect();
       camera.aspect = size.width / size.height;
       camera.updateProjectionMatrix();
       renderer.setSize(size.width, size.height);
